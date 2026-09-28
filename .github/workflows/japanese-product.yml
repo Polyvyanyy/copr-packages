@@ -1,0 +1,41 @@
+name: Japanese product
+
+on:
+  pull_request:
+    paths:
+      - 'university-in-a-box/**'
+      - '.github/workflows/japanese-product.yml'
+      - '.hoplite/settings.json'
+  push:
+    branches: [main]
+    paths:
+      - 'university-in-a-box/**'
+      - '.github/workflows/japanese-product.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: japanese-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: university-in-a-box
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24.19.0'
+          cache: npm
+          cache-dependency-path: university-in-a-box/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm run format:check
+      - run: npm audit --omit=dev --audit-level=high

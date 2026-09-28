@@ -8,6 +8,9 @@ export interface Source {
   licenseUrl: string;
   usage: string;
   category: 'textbook' | 'dictionary' | 'original';
+  attribution?: string;
+  sourceUse?: 'original' | 'reference' | 'license-reference';
+  licenseVerifiedAt?: string;
 }
 
 export interface Example {
@@ -39,11 +42,16 @@ export interface Lesson {
   japaneseTitle: string;
   description: string;
   durationMinutes: number;
-  skill: 'hiragana' | 'katakana' | 'reading' | 'grammar';
+  skill: 'hiragana' | 'katakana' | 'orthography' | 'reading' | 'grammar' | 'kanji' | 'writing';
   objectives: string[];
   blocks: LessonBlock[];
   exercises: Exercise[];
   sourceIds: string[];
+  prerequisiteLessonIds?: string[];
+  introducedItems?: string[];
+  contentVersion?: string;
+  contributor?: string;
+  reviewState?: 'not-independently-reviewed';
 }
 
 export interface CourseModule {
@@ -60,6 +68,16 @@ export interface Flashcard {
   back: string;
   reading?: string;
   kind: 'hiragana' | 'katakana' | 'word';
+  lessonId?: string;
+}
+
+export interface KanaRow {
+  id: string;
+  label: string;
+  hiragana: string[];
+  katakana: string[];
+  romanization: string[];
+  lessonId: string;
 }
 
 export interface Answer {
@@ -85,10 +103,14 @@ export interface CardReview {
   reviews: number;
 }
 
+export type WritingAssignmentId =
+  'introduction' | 'question' | 'location-existence' | 'reading-writing-action';
+
 export interface WritingVersion {
   id: string;
   text: string;
   createdAt: string;
+  assignmentId?: WritingAssignmentId;
 }
 
 export interface DiagnosticRecord {
@@ -113,6 +135,7 @@ export interface LearningState {
   savedCardIds: string[];
   savedSourceIds: string[];
   writingDraft: string;
+  writingDrafts?: Record<string, string>;
   writingHistory: WritingVersion[];
   reflections: Record<string, string>;
 }

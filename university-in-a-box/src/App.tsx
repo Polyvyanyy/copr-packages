@@ -11,11 +11,40 @@ import { Progress } from './pages/Progress';
 import { Library } from './pages/Library';
 import { Writing } from './pages/Writing';
 import { Connections } from './pages/Connections';
+import { ProductProvider, useProduct } from './product-context';
+import { Account } from './pages/Account';
+import { AuthPage } from './pages/Auth';
+import { Help } from './pages/Help';
+import { Kana } from './pages/Kana';
+import { Legal } from './pages/Legal';
+import { Membership } from './pages/Membership';
+import { Onboarding } from './pages/Onboarding';
+import { Welcome } from './pages/Welcome';
 
 export default function App() {
   return (
-    <LearningProvider>
+    <ProductProvider>
+      <ProductRoutes />
+    </ProductProvider>
+  );
+}
+
+function ProductRoutes() {
+  const { account } = useProduct();
+  return (
+    <LearningProvider key={account?.user.id ?? 'guest'} accountId={account?.user.id}>
       <Routes>
+        <Route path="welcome" element={<Welcome />} />
+        <Route path="auth/sign-in" element={<AuthPage key="sign-in" mode="sign-in" />} />
+        <Route path="auth/sign-up" element={<AuthPage key="sign-up" mode="sign-up" />} />
+        <Route
+          path="auth/forgot-password"
+          element={<AuthPage key="forgot-password" mode="forgot-password" />}
+        />
+        <Route
+          path="auth/reset-password"
+          element={<AuthPage key="reset-password" mode="reset-password" />}
+        />
         <Route element={<Shell />}>
           <Route index element={<Home />} />
           <Route path="plan" element={<Plan />} />
@@ -25,6 +54,13 @@ export default function App() {
           <Route path="library" element={<Library />} />
           <Route path="writing" element={<Writing />} />
           <Route path="connections" element={<Connections />} />
+          <Route path="kana" element={<Kana />} />
+          <Route path="account" element={<Account />} />
+          <Route path="membership" element={<Membership />} />
+          <Route path="onboarding" element={<Onboarding />} />
+          <Route path="help" element={<Help />} />
+          <Route path="legal/privacy" element={<Legal page="privacy" />} />
+          <Route path="legal/terms" element={<Legal page="terms" />} />
           <Route
             path="*"
             element={

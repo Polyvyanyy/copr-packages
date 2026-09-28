@@ -15,6 +15,11 @@ import {
   Sun,
   PenLine,
   Monitor,
+  Cloud,
+  CreditCard,
+  LifeBuoy,
+  TableProperties,
+  UserRound,
 } from 'lucide-react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router';
 import { lessons } from '../domain/curriculum';
@@ -23,6 +28,8 @@ import { useLearning } from '../learning-context';
 import { Dialog, ProgressBar } from './ui';
 import { SearchDialog } from './SearchDialog';
 import { MountainMark } from './Artwork';
+import { useProduct } from '../product-context';
+import { SyncBanner } from './SyncBanner';
 
 const navigation = [
   { to: '/', label: 'Сегодня', icon: Sun },
@@ -31,20 +38,34 @@ const navigation = [
   { to: '/progress', label: 'Мой прогресс', icon: ChartNoAxesCombined },
 ];
 const workspace = [
+  { to: '/kana', label: 'Таблица каны', icon: TableProperties },
   { to: '/library', label: 'Библиотека', icon: BookOpen },
   { to: '/writing', label: 'Мои работы', icon: NotebookPen },
   { to: '/connections', label: 'Новые связи', icon: Network },
 ];
+const serviceLinks = [
+  { to: '/account', label: 'Аккаунт', icon: UserRound },
+  { to: '/membership', label: 'Подписка', icon: CreditCard },
+  { to: '/help', label: 'Помощь', icon: LifeBuoy },
+];
 
 export function Shell() {
-  const { state, storageError, notice } = useLearning();
+  const { state, notice, syncStatus, cloudReady } = useLearning();
+  const { account, config, status } = useProduct();
   const [searchOpen, setSearchOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const stats = getCourseStats(state, lessons);
   const current =
-    [...navigation, ...workspace].find((item) => item.to === location.pathname)?.label ?? 'Занятие';
+    [...navigation, ...workspace, ...serviceLinks].find((item) => item.to === location.pathname)
+      ?.label ??
+    {
+      '/onboarding': 'Ваш план',
+      '/legal/privacy': 'Конфиденциальность',
+      '/legal/terms': 'Условия',
+    }[location.pathname] ??
+    'Занятие';
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -116,6 +137,19 @@ export function Shell() {
           </NavLink>
         ))}
       </nav>
+      <nav className="service-navigation" aria-label="Аккаунт и помощь">
+        {serviceLinks.map(({ to, label, icon: Icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            onClick={() => setMobileOpen(false)}
+            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+          >
+            <Icon size={18} strokeWidth={1.65} />
+            <span>{label}</span>
+          </NavLink>
+        ))}
+      </nav>
       <div className="sidebar-bottom">
         <div className="sidebar-note">
           <MountainMark />
@@ -173,33 +207,80 @@ export function Shell() {
               <kbd>⌘ K</kbd>
             </button>
             <span className="topbar-divider" />
-            <div className="local-save" title="Прогресс хранится только в этом браузере">
-              <Monitor size={16} />
-              <span>На этом устройстве</span>
-            </div>
-            <button
-              className="profile-avatar"
-              onClick={() => setAboutOpen(true)}
-              aria-label="Информация о кампусе"
-              lang="ja"
+            <div
+              className="local-save"
+              title={
+                account
+                  ? 'Состояние серверного сохранения'
+                  : 'Гостевые данные хранятся только в этом браузере'
+              }
             >
-              私
-            </button>
+              {account ? <Cloud size={16} /> : <Monitor size={16} />}
+              <span>
+                {account
+                  ? syncStatus === 'synced'
+                    ? 'Сохранено в аккаунте'
+                    : syncStatus === 'saving'
+                      ? 'Сохраняем…'
+                      : syncStatus === 'loading'
+                        ? 'Загружаем…'
+                        : 'Не синхронизировано'
+                  : 'На этом устройстве'}
+              </span>
+            </div>
+            <Link
+              className="profile-avatar"
+              to={account ? '/account' : '/auth/sign-in'}
+              aria-label={account ? 'Мой аккаунт' : 'Войти в аккаунт'}
+            >
+              {account ? account.user.name.slice(0, 1).toUpperCase() : <UserRound size={19} />}
+            </Link>
           </div>
         </header>
         <main id="main-content" className="main-content" tabIndex={-1}>
-          {storageError && (
-            <div className="storage-warning" role="alert">
-              {storageError}
+          <SyncBanner />
+          {!account && location.pathname === '/' && (
+            <div className="guest-banner">
+              <div>
+                <strong>Ваш первый шаг — без регистрации.</strong>
+                <p>
+                  Для сохранения между устройствами создайте аккаунт. Гостевые записи перенесёте
+                  сами, когда будете готовы.
+                </p>
+              </div>
+              <Link className="button secondary" to="/auth/sign-up">
+                Начать 7 дней бесплатно
+                <ChevronRight size={16} />
+              </Link>
             </div>
           )}
-          <Outlet />
+          {account?.subscription.access === 'free' && (
+            <div className="guest-banner">
+              <div>
+                <strong>Аккаунт доступен для чтения и экспорта.</strong>
+                <p>Для новых серверных сохранений продлите доступ. Ваши записи не удалены.</p>
+              </div>
+              <Link className="button secondary" to="/membership">
+                Условия подписки
+              </Link>
+            </div>
+          )}
+          {status === 'unavailable' && (
+            <p className="environment-note">
+              Сервис аккаунтов сейчас недоступен. Локальная практика не является серверным
+              сохранением.
+            </p>
+          )}
+          {(!account || cloudReady) && <Outlet />}
         </main>
         <footer className="page-footer">
           <span>
             University in a Box<span className="footer-dot">·</span>日本語
           </span>
           <span>
+            <Link to="/welcome">О курсе</Link>
+            <Link to="/legal/privacy">Данные</Link>
+            <Link to="/legal/terms">Условия</Link>
             <Leaf size={13} />
             Не быстрее. Глубже.
           </span>
@@ -245,18 +326,33 @@ export function Shell() {
         <div className="soft-note">
           <ShieldCheck size={21} />
           <div>
-            <strong>Сейчас — открытая локальная версия</strong>
+            <strong>
+              {account
+                ? 'Личный аккаунт с серверным сохранением'
+                : 'Открытая практика и личный аккаунт'}
+            </strong>
             <p>
-              Платежи, аккаунты и облачная синхронизация не подключены. Деньги не списываются. Вся
-              практика работает без запросов к ИИ.
+              Гостевые записи остаются в браузере. Аккаунт позволяет сохранять прогресс между
+              устройствами. 7 дней бесплатно, без карты. Вся практика работает без запросов к ИИ.
             </p>
           </div>
         </div>
         <h4>Прозрачность важнее обещаний</h4>
         <p className="muted">
-          Результаты хранятся в этом браузере. Внешняя академическая рецензия пилотной программы ещё
-          не проведена. Проверки заданий не являются сертификацией языкового уровня.
+          Внешняя академическая рецензия программы ещё не проведена. Проверки заданий не являются
+          сертификацией языкового уровня.{' '}
+          {config?.billing.enabled
+            ? 'Управление оплатой доступно на странице подписки.'
+            : 'Приём платежей в этой среде не настроен.'}
         </p>
+        <Link
+          className="button secondary about-account-link"
+          to={account ? '/account' : '/auth/sign-up'}
+          onClick={() => setAboutOpen(false)}
+        >
+          {account ? 'Открыть аккаунт' : 'Создать аккаунт'}
+          <ChevronRight size={16} />
+        </Link>
         <Link className="text-link" to="/library" onClick={() => setAboutOpen(false)}>
           Источники и условия использования
           <ChevronRight size={16} />

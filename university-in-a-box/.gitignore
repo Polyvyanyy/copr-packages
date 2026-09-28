@@ -6,3 +6,13 @@ test-results/
 playwright-report/
 .env*
 !.env.example
+data/
+.data/
+backups/
+mail-outbox/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db
+*.db-shm
+*.db-wal

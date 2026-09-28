@@ -9,59 +9,140 @@ import {
   NotebookPen,
   Save,
 } from 'lucide-react';
-import { Link } from 'react-router';
-import { reviewWriting } from '../domain/progress';
+import { Link, useSearchParams } from 'react-router';
+import {
+  getWritingDraft,
+  getWritingHistory,
+  reviewWritingAssignment,
+  updateWritingDraft,
+} from '../domain/progress';
+import { getWritingAssignment, writingAssignments } from '../domain/writing-assignments';
+import type { WritingAssignment } from '../domain/writing-assignments';
 import type { WritingVersion } from '../domain/types';
 import { useLearning } from '../learning-context';
 import { Dialog, SectionTitle, shortDate } from '../components/ui';
+import { useProduct } from '../product-context';
+
+function JapaneseText({ children }: { children: string }) {
+  return children
+    .split(/([\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}ー々。、！？]+)/u)
+    .map((part, index) =>
+      index % 2 ? (
+        <span lang="ja" key={index}>
+          {part}
+        </span>
+      ) : (
+        part
+      ),
+    );
+}
 
 export function Writing() {
-  const { state, setState, notify } = useLearning();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const assignment = getWritingAssignment(searchParams.get('assignment') ?? 'introduction');
+
+  return (
+    <div className="writing-page">
+      <SectionTitle
+        eyebrow="ПИСЬМО · МЫСЛЬ НА БУМАГЕ"
+        title="Мысль обретает форму."
+        description="Пишите, замечайте детали и возвращайтесь к своим первым строчкам."
+      />
+      <div className="writing-assignment-picker">
+        <label htmlFor="writing-assignment-select">Выберите задание</label>
+        <select
+          id="writing-assignment-select"
+          value={assignment?.id ?? ''}
+          aria-describedby="writing-assignment-note"
+          onChange={(event) => {
+            const next = new URLSearchParams(searchParams);
+            next.set('assignment', event.target.value);
+            setSearchParams(next);
+          }}
+        >
+          {!assignment && (
+            <option value="" disabled>
+              Выберите доступное задание
+            </option>
+          )}
+          {writingAssignments.map((item, index) => (
+            <option value={item.id} key={item.id}>
+              {String(index + 1).padStart(2, '0')} · {item.title}
+            </option>
+          ))}
+        </select>
+        <p className="small muted" id="writing-assignment-note">
+          {writingAssignments.length} задания · у каждого свой черновик и история.
+        </p>
+      </div>
+      {assignment ? (
+        <WritingWorkspace key={assignment.id} assignment={assignment} />
+      ) : (
+        <div className="soft-note" role="status">
+          <p>Такого письменного задания нет. Выберите одно из списка — ваши тексты сохранены.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WritingWorkspace({ assignment }: { assignment: WritingAssignment }) {
+  const { state, setState, notify, syncStatus, storageError } = useLearning();
+  const { account } = useProduct();
   const [checkedText, setCheckedText] = useState<string | null>(null);
   const [exampleOpen, setExampleOpen] = useState(false);
   const [version, setVersion] = useState<WritingVersion | null>(null);
-  const draft = state.writingDraft;
-  const feedback = checkedText === null ? null : reviewWriting(checkedText);
+  const draft = getWritingDraft(state, assignment.id);
+  const history = getWritingHistory(state, assignment.id);
+  const feedback =
+    checkedText === null ? null : reviewWritingAssignment(checkedText, assignment.id);
   const outdated = checkedText !== null && checkedText !== draft;
+  const checked = feedback !== null && !outdated;
+  const checks = checked
+    ? feedback.checks
+    : assignment.checks.map(({ id, label }) => ({ id, label, passed: false }));
 
   function saveVersion() {
     if (!draft.trim()) return;
-    if (state.writingHistory.at(-1)?.text === draft) {
+    if (history.at(-1)?.text === draft) {
       notify('Эта версия уже сохранена');
       return;
     }
-    const nextVersion = {
+    const nextVersion: WritingVersion = {
       id: crypto.randomUUID(),
       text: draft,
       createdAt: new Date().toISOString(),
+      ...(assignment.id === 'introduction' ? {} : { assignmentId: assignment.id }),
     };
     setState((previous) => ({
       ...previous,
       writingHistory: [...previous.writingHistory, nextVersion].slice(-100),
     }));
-    notify('Версия сохранена в истории работ');
+    notify(
+      account
+        ? 'Версия добавлена в историю; статус серверного сохранения — сверху'
+        : 'Версия сохранена в истории работ',
+    );
   }
 
   return (
-    <div>
-      <SectionTitle
-        eyebrow="EDITOR · МЫСЛЬ НА БУМАГЕ"
-        title="Мысль обретает форму."
-        description="Пишите, замечайте детали и возвращайтесь к своим первым строчкам."
-      />
+    <>
       <div className="writing-layout">
         <div className="writing-main">
-          <section className="writing-assignment">
-            <span className="assignment-number">01</span>
+          <section className="writing-assignment" aria-labelledby="writing-assignment-title">
+            <span className="assignment-number" aria-hidden="true">
+              {String(writingAssignments.indexOf(assignment) + 1).padStart(2, '0')}
+            </span>
             <div>
               <span className="eyebrow">ПИСЬМЕННАЯ РАБОТА</span>
-              <h2>Несколько слов о себе</h2>
+              <h2 id="writing-assignment-title">{assignment.title}</h2>
               <p>
-                Представьтесь одним коротким предложением по модели{' '}
-                <span lang="ja">わたしは … です。</span> Используйте имя из образца: あき (Аки) или
-                みき (Мики).
+                <JapaneseText>{assignment.description}</JapaneseText>
               </p>
-              <Link className="text-link" to="/lesson/self-introduction">
+              <p className="writing-model" lang="ja">
+                {assignment.model}
+              </p>
+              <Link className="text-link" to={`/lesson/${assignment.lessonId}`}>
                 Вернуться к занятию
                 <ArrowRight size={15} />
               </Link>
@@ -74,7 +155,15 @@ export function Writing() {
                 Ваш черновик
               </label>
               <span className="small muted">
-                {state.writingDraft ? 'Сохраняется в этом браузере' : 'Начните с одной строчки'}
+                {draft
+                  ? storageError
+                    ? 'Есть несохранённые изменения — см. статус сверху'
+                    : account
+                      ? syncStatus === 'synced'
+                        ? 'Сохранено в аккаунте'
+                        : 'Ожидает серверного сохранения'
+                      : 'Сохраняется в этом браузере'
+                  : 'Начните с одной строчки'}
               </span>
             </div>
             <textarea
@@ -84,11 +173,12 @@ export function Writing() {
               spellCheck={false}
               maxLength={2000}
               value={draft}
-              placeholder="わたしは … です。"
-              onChange={(event) =>
-                setState((previous) => ({ ...previous, writingDraft: event.target.value }))
-              }
-              aria-describedby="writing-local-note"
+              placeholder={assignment.model}
+              onChange={(event) => {
+                const text = event.target.value;
+                setState((previous) => updateWritingDraft(previous, assignment.id, text));
+              }}
+              aria-describedby="writing-assignment-title writing-local-note"
             />
             <div className="editor-bottom">
               <span className="small muted">{draft.length} / 2000 символов</span>
@@ -104,10 +194,8 @@ export function Writing() {
             </div>
             {exampleOpen && (
               <div className="writing-example" id="writing-example">
-                <span lang="ja">わたしは あき です。</span>
-                <p>
-                  «Я — Аки». Пробелы оставлены для наглядности; это пример, а не ваш готовый ответ.
-                </p>
+                <span lang="ja">{assignment.example}</span>
+                <p>«{assignment.exampleMeaning}» Сверьтесь с образцом и условиями задания.</p>
               </div>
             )}
           </section>
@@ -126,17 +214,19 @@ export function Writing() {
             </button>
           </div>
           <p className="small muted" id="writing-local-note">
-            Черновик хранится только на этом устройстве. Не указывайте личные данные: для упражнения
-            достаточно вымышленного имени.
+            {account
+              ? 'Черновик синхронизируется с вашим аккаунтом.'
+              : 'Черновик хранится только на этом устройстве.'}{' '}
+            Не указывайте личные данные: используйте слова и имена из задания.
           </p>
-          <section className="writing-history">
+          <section className="writing-history" aria-labelledby="writing-history-heading">
             <div className="section-heading">
-              <h2>Как менялся ваш текст</h2>
-              <span className="small muted">{state.writingHistory.length} / 100 версий</span>
+              <h2 id="writing-history-heading">Как менялся ваш текст</h2>
+              <span className="small muted">Версий в этом задании: {history.length}</span>
             </div>
-            {state.writingHistory.length ? (
+            {history.length ? (
               <div className="card">
-                {[...state.writingHistory]
+                {[...history]
                   .reverse()
                   .slice(0, 10)
                   .map((item) => (
@@ -159,52 +249,55 @@ export function Writing() {
               </div>
             )}
             <p className="small muted">
-              Показываем до 10 последних версий. Полная локальная история доступна в экспорте на
-              странице прогресса.
+              Здесь — до 10 последних версий выбранного задания. Общий лимит — 100 версий для всех
+              заданий. Вся сохранённая история доступна в экспорте на странице прогресса.
             </p>
           </section>
         </div>
         <aside className="writing-aside">
           <section className="card editor-feedback">
             <div className="tutor-heading">
-              <span className="alter-avatar peach">E</span>
+              <span className="alter-avatar peach" aria-hidden="true">
+                <NotebookPen size={17} />
+              </span>
               <div>
-                <strong>Внимательный Editor</strong>
+                <strong>Проверка по условиям</strong>
                 <span>Только то, что можно проверить</span>
               </div>
             </div>
-            <h3>{feedback && !outdated ? 'Сверим с заданием' : 'Сначала — ваша мысль'}</h3>
+            <h3>{checked ? 'Сверим с заданием' : 'Сначала — ваша мысль'}</h3>
             <p>
               {outdated
                 ? 'Текст изменился. Проверьте условия ещё раз, чтобы обновить разбор.'
-                : 'Проверка ищет две конкретные конструкции. Смысл и остальную грамматику она не оценивает.'}
+                : 'Проверка ищет только конструкции из списка. Смысл и остальную грамматику она не оценивает.'}
             </p>
-            <div className="writing-checks" aria-live="polite">
-              {feedback && !outdated ? (
-                feedback.checks.map((check) => (
-                  <div className={check.passed ? 'passed' : ''} key={check.id}>
-                    {check.passed ? <Check size={18} /> : <Circle size={16} />}
-                    <span>{check.label}</span>
-                  </div>
-                ))
-              ) : (
-                <>
-                  <div>
-                    <Circle size={16} />
-                    <span>
-                      Тема <span lang="ja">わたしは</span> или <span lang="ja">私は</span>
+            <div
+              className="writing-checks"
+              role="list"
+              aria-label="Условия задания"
+              aria-live="polite"
+            >
+              {checks.map((check) => (
+                <div className={check.passed ? 'passed' : ''} role="listitem" key={check.id}>
+                  {check.passed ? (
+                    <Check size={18} aria-hidden="true" />
+                  ) : (
+                    <Circle size={16} aria-hidden="true" />
+                  )}
+                  <span>
+                    <span className="sr-only">
+                      {checked
+                        ? check.passed
+                          ? 'Выполнено: '
+                          : 'Не выполнено: '
+                        : 'Не проверено: '}
                     </span>
-                  </div>
-                  <div>
-                    <Circle size={16} />
-                    <span>
-                      Модель «я — [имя]» с <span lang="ja">です</span>
-                    </span>
-                  </div>
-                </>
-              )}
+                    <JapaneseText>{check.label}</JapaneseText>
+                  </span>
+                </div>
+              ))}
             </div>
-            {feedback && !outdated && (
+            {checked && (
               <div className="editor-notes" role="status">
                 {feedback.notes.map((note) => (
                   <p key={note}>{note}</p>
@@ -214,7 +307,7 @@ export function Writing() {
             <div className="soft-note">
               <Lightbulb size={18} />
               <span>
-                Даже две отметки не означают «ошибок нет». Это формальная самопроверка, не оценка
+                Все отметки не означают «ошибок нет». Это формальная самопроверка, не оценка
                 владения языком.
               </span>
             </div>
@@ -233,20 +326,29 @@ export function Writing() {
         {version && (
           <>
             <p className="small muted">
-              {shortDate(version.createdAt)} · текст остаётся на вашем устройстве
+              {shortDate(version.createdAt)} · {assignment.title}
+            </p>
+            <p className="small muted">
+              {account
+                ? 'История синхронизируется с аккаунтом; статус сохранения — сверху.'
+                : storageError
+                  ? 'Версия доступна в этой вкладке. Экспортируйте данные перед её закрытием.'
+                  : 'История хранится в этом браузере.'}
             </p>
             <div className="version-preview" lang="ja">
               {version.text}
             </div>
             <p className="muted">
-              Восстановление заменит текущий черновик. Сохранённые версии останутся в истории.
+              Восстановление заменит черновик только этого задания. Сохранённые версии и черновики
+              других заданий останутся без изменений.
             </p>
             <div className="dialog-actions">
               <button
                 className="button primary"
                 onClick={() => {
-                  setState((previous) => ({ ...previous, writingDraft: version.text }));
+                  setState((previous) => updateWritingDraft(previous, assignment.id, version.text));
                   setCheckedText(null);
+                  setExampleOpen(false);
                   setVersion(null);
                   notify('Версия восстановлена в черновике');
                 }}
@@ -260,6 +362,6 @@ export function Writing() {
           </>
         )}
       </Dialog>
-    </div>
+    </>
   );
 }

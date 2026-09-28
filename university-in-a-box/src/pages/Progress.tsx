@@ -13,7 +13,6 @@ import {
 import { Link } from 'react-router';
 import { lessons } from '../domain/curriculum';
 import {
-  createInitialState,
   getActivityDates,
   getCourseStats,
   getLessonStatus,
@@ -23,6 +22,7 @@ import {
 import type { LearningState } from '../domain/types';
 import { useLearning } from '../learning-context';
 import { Dialog, EmptyState, ProgressBar, SectionTitle, shortDate, plural } from '../components/ui';
+import { useProduct } from '../product-context';
 
 const MAX_IMPORT_BYTES = 1_000_000;
 
@@ -67,10 +67,13 @@ function lessonStatusDetail(status: keyof typeof statusLabels, attempts: number)
 }
 
 export function Progress() {
-  const { state, setState, notify } = useLearning();
+  const { state, setState, notify, resetProgress } = useLearning();
+  const { account } = useProduct();
   const [importCandidate, setImportCandidate] = useState<LearningState | null>(null);
   const [importError, setImportError] = useState<string | null>(null);
   const [resetOpen, setResetOpen] = useState(false);
+  const [resetBusy, setResetBusy] = useState(false);
+  const [resetError, setResetError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const stats = getCourseStats(state, lessons);
@@ -103,7 +106,11 @@ export function Progress() {
       link.click();
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 0);
-      notify('JSON-файл с локальным прогрессом подготовлен.');
+      notify(
+        account
+          ? 'JSON-файл с учебным прогрессом подготовлен.'
+          : 'JSON-файл с локальным прогрессом подготовлен.',
+      );
     } catch {
       notify('Не удалось подготовить JSON-файл в этом браузере.');
     }
@@ -139,21 +146,43 @@ export function Progress() {
     if (!importCandidate) return;
     setState(importCandidate);
     setImportCandidate(null);
-    notify('Локальный прогресс заменён данными из JSON-файла.');
+    notify(
+      account
+        ? 'Данные из JSON подготовлены к сохранению в аккаунте.'
+        : 'Локальный прогресс заменён данными из JSON-файла.',
+    );
   }
 
   function confirmReset() {
-    setState(createInitialState());
-    setResetOpen(false);
-    notify('Локальные результаты и настройки сброшены.');
+    if (!account) {
+      void resetProgress();
+      setResetOpen(false);
+      notify('Локальные результаты и настройки сброшены.');
+      return;
+    }
+    setResetBusy(true);
+    setResetError(null);
+    void resetProgress().then((success) => {
+      setResetBusy(false);
+      if (success) {
+        setResetOpen(false);
+        notify('Учебные данные удалены с сервера. Аккаунт и подписка сохранены.');
+      } else {
+        setResetError('Сброс не выполнен. Закройте окно и проверьте сообщение о синхронизации. Ваши данные не удалены.');
+      }
+    });
   }
 
   return (
     <div className="progress-page">
       <SectionTitle
-        eyebrow="ПРОГРАММА · ВЕРСИЯ 1 · ЛОКАЛЬНЫЕ ДАННЫЕ"
+        eyebrow={account ? 'ПРОГРАММА · ДАННЫЕ ВАШЕГО АККАУНТА' : 'ПРОГРАММА · ЛОКАЛЬНЫЕ ДАННЫЕ'}
         title="Мой прогресс"
-        description="Здесь видны действия и результаты учебной практики в этом браузере — без обещаний внешней сертификации."
+        description={
+          account
+            ? 'Ваши действия и результаты, сохранённые в аккаунте, — без обещаний внешней сертификации.'
+            : 'Здесь видны действия и результаты учебной практики в этом браузере — без обещаний внешней сертификации.'
+        }
       />
 
       <section className="progress-metrics" aria-label="Метрики учебной практики">
@@ -322,10 +351,11 @@ export function Progress() {
 
           <section className="card progress-data" aria-labelledby="progress-data-title">
             <span className="eyebrow">РЕЗЕРВНАЯ КОПИЯ И ПЕРЕНОС</span>
-            <h2 id="progress-data-title">Данные в этом браузере</h2>
+            <h2 id="progress-data-title">
+              {account ? 'Данные аккаунта' : 'Данные в этом браузере'}
+            </h2>
             <p className="muted">
-              Результаты живут только на этом устройстве и в этом браузере. Нет аккаунта, облачной
-              синхронизации или внешнего подтверждения результата.
+              {account ? 'Изменения сохраняются в вашем аккаунте. Статус синхронизации виден сверху. Экспортируйте записи перед импортом или сбросом: эти действия заменят серверную версию.' : 'Эти гостевые результаты живут только на этом устройстве и в этом браузере. Для переноса между устройствами можно создать аккаунт или использовать JSON-файл.'} Учебные записи не являются внешним подтверждением результата.
             </p>
             <button className="button secondary" onClick={exportData}>
               <Download size={17} />
@@ -350,7 +380,7 @@ export function Progress() {
             )}
             <button className="quiet-button" onClick={() => setResetOpen(true)}>
               <RotateCcw size={16} />
-              Сбросить локальные данные
+              {account ? 'Сбросить учебные данные' : 'Сбросить локальные данные'}
             </button>
           </section>
         </aside>
@@ -364,7 +394,7 @@ export function Progress() {
         {importCandidate && (
           <div className="progress-data">
             <p>
-              Импорт заменит все текущие локальные результаты, карточки, черновик и настройки на
+              Импорт заменит все текущие {account ? 'данные аккаунта' : 'локальные результаты'}, карточки, черновик и настройки на
               данные из выбранного файла.
             </p>
             <p className="muted">
@@ -387,23 +417,24 @@ export function Progress() {
 
       <Dialog
         open={resetOpen}
-        onClose={() => setResetOpen(false)}
-        title="Сбросить локальный прогресс?"
+        onClose={() => { if (!resetBusy) setResetOpen(false); }}
+        title={account ? 'Сбросить прогресс аккаунта?' : 'Сбросить локальный прогресс?'}
       >
         <div className="progress-data">
           <p>
-            Будут удалены все сохранённые попытки, карточки, тексты и настройки в этом браузере.
+            Будут удалены все сохранённые попытки, карточки, тексты и настройки {account ? 'в вашем аккаунте' : 'в этом браузере'}.
             Отменить это действие нельзя.
           </p>
           <p className="muted">
             Если эти данные могут понадобиться, сначала экспортируйте JSON-файл.
           </p>
+          {resetError && <p className="form-error" role="alert">{resetError}</p>}
           <div>
-            <button className="quiet-button" onClick={() => setResetOpen(false)}>
+            <button className="quiet-button" disabled={resetBusy} onClick={() => setResetOpen(false)}>
               Отмена
             </button>
-            <button className="button danger" onClick={confirmReset}>
-              Сбросить данные
+            <button className="button danger" disabled={resetBusy} onClick={confirmReset}>
+              {resetBusy ? 'Удаляем данные…' : 'Сбросить данные'}
             </button>
           </div>
         </div>

@@ -1,17 +1,48 @@
+import { kanaRows } from './kana';
 import type { CourseModule, Exercise, Flashcard, Lesson, Source } from './types';
+
+export const CONTENT_VERSION = 'written-foundations-2026.1';
+export const COURSE_MANIFEST = {
+  contentVersion: CONTENT_VERSION,
+  modules: 3,
+  lessons: 40,
+  exercisesPerLesson: 5,
+  exercises: 200,
+  reviewState: 'not-independently-reviewed' as const,
+} as const;
 
 export const sources: Source[] = [
   {
     id: 'source-original-pilot',
-    title: 'Японский: первые знаки и фразы — пилотные материалы University in a Box',
+    title: 'Японский: письменная основа — материалы University in a Box',
     author: 'University in a Box',
     description:
-      'Оригинальные микроуроки, задания, примеры и карточки, подготовленные с помощью ИИ. Независимая предметная рецензия ещё не проведена.',
+      'Оригинальные уроки, задания, примеры и карточки письменной основы японского. Материалы подготовлены с помощью ИИ; независимая предметная рецензия ещё не проведена.',
     url: '/library',
     license: 'CC BY 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
-    usage: 'Первичный источник всех текстов уроков, упражнений и карточек в этом разделе.',
+    usage:
+      'Первичный источник оригинальных текстов уроков, упражнений и карточек в этой программе.',
     category: 'original',
+    attribution: 'University in a Box, «Японский: письменная основа», CC BY 4.0.',
+    sourceUse: 'original',
+    licenseVerifiedAt: '2026-09-06',
+  },
+  {
+    id: 'source-utsa-book',
+    title: 'Step-by-Step Japanese 1',
+    author: 'Mimi Yu (MYsensei), UT San Antonio Pressbooks',
+    description:
+      'Открытый учебник, чья вводная часть отделяет освоение хираганы и катаканы от дальнейших начальных тем.',
+    url: 'https://utsa.pressbooks.pub/sbsjapanese1/',
+    license: 'CC BY 4.0',
+    licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+    usage:
+      'Справочная проверка последовательности: тексты, таблицы, задания и переводы приложения написаны заново.',
+    category: 'textbook',
+    attribution: 'Mimi Yu, Step-by-Step Japanese 1, CC BY 4.0; использовано только как справочный источник.',
+    sourceUse: 'reference',
+    licenseVerifiedAt: '2026-09-06',
   },
   {
     id: 'source-utsa-module-3',
@@ -24,6 +55,10 @@ export const sources: Source[] = [
     usage:
       'Справочная проверка формы самопрезентации; текст, примеры и задания приложения написаны заново.',
     category: 'textbook',
+    attribution:
+      'Mimi Yu, Step-by-Step Japanese 1, Module 3.1, CC BY 4.0; использовано только как справочный источник.',
+    sourceUse: 'reference',
+    licenseVerifiedAt: '2026-09-06',
   },
   {
     id: 'source-utsa-module-6',
@@ -36,6 +71,10 @@ export const sources: Source[] = [
     usage:
       'Справочная проверка роли темы в модели X は Y です; готовые фрагменты не импортировались.',
     category: 'textbook',
+    attribution:
+      'Mimi Yu, Step-by-Step Japanese 1, Module 6.1, CC BY 4.0; использовано только как справочный источник.',
+    sourceUse: 'reference',
+    licenseVerifiedAt: '2026-09-06',
   },
   {
     id: 'source-edrdg-license',
@@ -49,34 +88,84 @@ export const sources: Source[] = [
     usage:
       'Лицензия приведена для справки: записи, переводы, примеры и данные JMdict/KANJIDIC2 не импортировались.',
     category: 'dictionary',
+    attribution:
+      'Electronic Dictionary Research and Development Group, general dictionary licence statement, CC BY-SA 4.0.',
+    sourceUse: 'license-reference',
+    licenseVerifiedAt: '2026-09-06',
   },
 ];
 
 export const modules: CourseModule[] = [
   {
     id: 'hiragana',
-    title: 'Хирагана',
+    title: 'Хирагана и запись',
     japaneseTitle: 'ひらがな',
-    description: 'Первые письменные соответствия и короткие слова на хирагане.',
-    lessonIds: ['hiragana-vowels', 'hiragana-k', 'first-words'],
+    description:
+      'Полная базовая хирагана, знаки с диакритиками, малые формы и контролируемое чтение слов.',
+    lessonIds: [
+      'hiragana-vowels',
+      'hiragana-k',
+      'hiragana-s',
+      'hiragana-t',
+      'hiragana-n',
+      'hiragana-h',
+      'hiragana-m',
+      'hiragana-y-r',
+      'hiragana-w-n',
+      'hiragana-mixed-rows',
+      'hiragana-diacritics',
+      'hiragana-combinations',
+      'hiragana-small-tsu',
+      'hiragana-long-vowels-punctuation',
+      'first-words',
+    ],
   },
   {
     id: 'katakana',
     title: 'Катакана',
     japaneseTitle: 'カタカナ',
-    description: 'Базовые знаки катаканы и несколько слов с ними.',
-    lessonIds: ['katakana-vowels', 'katakana-words'],
+    description:
+      'Полная базовая катакана, малые знаки, долгий знак и контролируемое написание заимствований.',
+    lessonIds: [
+      'katakana-vowels',
+      'katakana-k-s',
+      'katakana-t-n',
+      'katakana-h-m',
+      'katakana-y-r-w-n',
+      'katakana-mixed-rows',
+      'katakana-diacritics',
+      'katakana-combinations',
+      'katakana-small-symbols',
+      'katakana-long-vowels',
+      'katakana-similar-forms',
+      'katakana-loanword-spelling',
+      'katakana-words',
+    ],
   },
   {
     id: 'sentences',
-    title: 'Первые предложения',
-    japaneseTitle: 'はじめての文',
-    description: 'Тема は и краткое письменное представление.',
-    lessonIds: ['topic-wa', 'self-introduction'],
+    title: 'Контролируемое чтение и письмо',
+    japaneseTitle: '読む・書く',
+    description:
+      'Первые письменные модели, ограниченный словарь, выбранные кандзи и короткие контролируемые тексты.',
+    lessonIds: [
+      'writing-layout',
+      'topic-wa',
+      'copula-questions',
+      'also-and-possession',
+      'demonstratives',
+      'numbers-and-symbols',
+      'place-and-existence',
+      'verb-forms',
+      'adjectives',
+      'controlled-kanji',
+      'controlled-reading',
+      'self-introduction',
+    ],
   },
 ];
 
-export const lessons: Lesson[] = [
+const legacyLessons: Lesson[] = [
   {
     id: 'hiragana-vowels',
     moduleId: 'hiragana',
@@ -860,7 +949,1366 @@ export const lessons: Lesson[] = [
   },
 ];
 
-export const flashcards: Flashcard[] = [
+type ExerciseDraft = Omit<Exercise, 'id' | 'options' | 'answerId'> & {
+  options: string[];
+  answerIndex: number;
+};
+
+interface AuthoredLessonInput {
+  id: string;
+  moduleId: string;
+  title: string;
+  japaneseTitle: string;
+  description: string;
+  durationMinutes: number;
+  skill: Lesson['skill'];
+  objectives: string[];
+  blocks: Lesson['blocks'];
+  sourceIds: string[];
+  prerequisiteLessonIds: string[];
+  introducedItems: string[];
+  exercisePrefix: string;
+  exerciseDrafts: ExerciseDraft[];
+}
+
+const originalSourceIds = ['source-original-pilot', 'source-utsa-book'];
+const grammarSourceIds = [
+  'source-original-pilot',
+  'source-utsa-book',
+  'source-utsa-module-6',
+];
+const optionSuffixes = ['a', 'b', 'c', 'd'];
+const contentMetadata = {
+  contentVersion: CONTENT_VERSION,
+  contributor: 'University in a Box — original AI-assisted educational material',
+  reviewState: 'not-independently-reviewed' as const,
+};
+
+function fixedExercises(prefix: string, drafts: ExerciseDraft[]): Exercise[] {
+  if (drafts.length !== COURSE_MANIFEST.exercisesPerLesson)
+    throw new Error(`Expected ${COURSE_MANIFEST.exercisesPerLesson} exercises for ${prefix}`);
+
+  return drafts.map(({ answerIndex, options, ...draft }, index) => {
+    const id = `exercise-${prefix}-${index + 1}`;
+    const answerSuffix = optionSuffixes[answerIndex];
+    if (!answerSuffix || options.length < 3 || answerIndex < 0 || answerIndex >= options.length)
+      throw new Error(`Invalid fixed exercise ${id}`);
+    return {
+      ...draft,
+      id,
+      options: options.map((label, optionIndex) => ({
+        id: `${id}-${optionSuffixes[optionIndex]}`,
+        label,
+      })),
+      answerId: `${id}-${answerSuffix}`,
+    };
+  });
+}
+
+function authoredLesson({
+  exercisePrefix,
+  exerciseDrafts,
+  prerequisiteLessonIds,
+  introducedItems,
+  ...lesson
+}: AuthoredLessonInput): Lesson {
+  return {
+    ...lesson,
+    ...contentMetadata,
+    prerequisiteLessonIds,
+    introducedItems,
+    exercises: fixedExercises(exercisePrefix, exerciseDrafts),
+  };
+}
+
+function annotatedLegacyLesson(
+  id: string,
+  prerequisiteLessonIds: string[],
+  introducedItems: string[],
+): Lesson {
+  const lesson = legacyLessons.find((item) => item.id === id);
+  if (!lesson) throw new Error(`Missing legacy lesson ${id}`);
+  return { ...lesson, ...contentMetadata, prerequisiteLessonIds, introducedItems };
+}
+
+const hiraganaLessons: Lesson[] = [
+  authoredLesson({
+    id: 'hiragana-s',
+    moduleId: 'hiragana',
+    title: 'Ряд さ・し・す・せ・そ',
+    japaneseTitle: 'さ・し・す・せ・そ',
+    description: 'Добавьте ряд S и собирайте короткие записи из уже знакомых знаков.',
+    durationMinutes: 10,
+    skill: 'hiragana',
+    objectives: ['соотносить さ、し、す、せ、そ с письменными подписями', 'собирать короткие строки из рядов A, K и S'],
+    blocks: [
+      {
+        title: 'Пять новых форм',
+        body: 'Ряд さ・し・す・せ・そ записывается как sa, shi, su, se, so. Латиница остаётся только письменной подсказкой к знаку.',
+        examples: [{ japanese: 'さしすせそ', reading: 'sashisuseso', meaning: 'Порядок ряда S.' }],
+      },
+      {
+        title: 'Соберите запись',
+        body: 'Читайте слева направо и соединяйте знакомые письменные подписи без пробелов внутри одной строки.',
+        examples: [{ japanese: 'すこし', reading: 'sukoshi', meaning: 'Короткая запись из уже знакомых рядов.' }],
+      },
+      {
+        title: 'Проверьте форму',
+        body: 'Сравните さ、し、す、せ、そ по форме, а не по положению в строке. Так легче заметить перестановку.',
+        examples: [{ japanese: 'しせ', reading: 'shise', meaning: 'Две разные формы рядом.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-k'],
+    introducedItems: ['hiragana:さ', 'hiragana:し', 'hiragana:す', 'hiragana:せ', 'hiragana:そ'],
+    exercisePrefix: 'hs',
+    exerciseDrafts: [
+      { prompt: 'Какая письменная подпись у знака し?', options: ['shi', 'su', 'se'], answerIndex: 0, explanation: 'し записывается как shi.', hint: 'Это второй знак нового ряда.' },
+      { prompt: 'Какой знак соответствует подписи su?', options: ['す', 'さ', 'そ'], answerIndex: 0, explanation: 'su соответствует знаку す.', hint: 'Посмотрите на третий знак ряда.' },
+      { prompt: 'Какая строка соответствует sa + shi?', options: ['さし', 'しさ', 'すし'], answerIndex: 0, explanation: 'Сначала sa → さ, затем shi → し.', hint: 'Сохраняйте порядок двух подписей.' },
+      { prompt: 'Какое соответствие записано верно?', options: ['せ — se', 'そ — sa', 'し — su'], answerIndex: 0, explanation: 'せ имеет письменную подпись se.', hint: 'Найдите четвёртую пару ряда.' },
+      { prompt: 'Какой знак завершает ряд さ・し・す・せ・そ?', options: ['そ', 'せ', 'す'], answerIndex: 0, explanation: 'Последний знак ряда S — そ.', hint: 'Отсчитайте пять позиций.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-t',
+    moduleId: 'hiragana',
+    title: 'Ряд た・ち・つ・て・と',
+    japaneseTitle: 'た・ち・つ・て・と',
+    description: 'Добавьте ряд T и замечайте его формы внутри коротких записей.',
+    durationMinutes: 10,
+    skill: 'hiragana',
+    objectives: ['соотносить た、ち、つ、て、と с письменными подписями', 'различать порядок знаков в короткой строке'],
+    blocks: [
+      {
+        title: 'Ряд T',
+        body: 'Запомните последовательность た・ち・つ・て・と: ta, chi, tsu, te, to. У ряда есть две подписи, не похожие на первую букву ряда: chi и tsu.',
+        examples: [{ japanese: 'たちつてと', reading: 'tachitsuteto', meaning: 'Порядок ряда T.' }],
+      },
+      {
+        title: 'Две особые подписи',
+        body: 'Не выводите подпись из латинской буквы T: для ち используйте chi, а для つ — tsu. Сверяйте каждую пару целиком.',
+        examples: [{ japanese: 'ちつ', reading: 'chitsu', meaning: 'Две формы с особыми подписями.' }],
+      },
+      {
+        title: 'Короткая строка',
+        body: 'В записи たこ сначала узнайте た, затем こ. Такая проверка не требует угадывать значение слова.',
+        examples: [{ japanese: 'たこ', reading: 'tako', meaning: 'Запись из знакомых знаков.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-s'],
+    introducedItems: ['hiragana:た', 'hiragana:ち', 'hiragana:つ', 'hiragana:て', 'hiragana:と'],
+    exercisePrefix: 'ht',
+    exerciseDrafts: [
+      { prompt: 'Какая письменная подпись у ち?', options: ['chi', 'ti', 'tsu'], answerIndex: 0, explanation: 'Знак ち записывается как chi.', hint: 'Это второй знак ряда T.' },
+      { prompt: 'Какой знак соответствует подписи tsu?', options: ['つ', 'て', 'と'], answerIndex: 0, explanation: 'tsu соответствует знаку つ.', hint: 'Это третья позиция ряда T.' },
+      { prompt: 'Какая запись соответствует ta + ko?', options: ['たこ', 'こと', 'たけ'], answerIndex: 0, explanation: 'ta → た и ko → こ.', hint: 'Сначала найдите знак ряда T.' },
+      { prompt: 'Какое соответствие верно?', options: ['て — te', 'と — tsu', 'た — chi'], answerIndex: 0, explanation: 'て имеет подпись te.', hint: 'Проверьте четвёртую пару.' },
+      { prompt: 'Какой знак стоит перед と в ряду?', options: ['て', 'つ', 'ち'], answerIndex: 0, explanation: 'В конце ряда порядок такой: つ・て・と.', hint: 'Посмотрите на две последние позиции.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-n',
+    moduleId: 'hiragana',
+    title: 'Ряд な・に・ぬ・ね・の',
+    japaneseTitle: 'な・に・ぬ・ね・の',
+    description: 'Добавьте ряд N и соединяйте его со знакомыми рядами.',
+    durationMinutes: 10,
+    skill: 'hiragana',
+    objectives: ['соотносить な、に、ぬ、ね、の с письменными подписями', 'читать контролируемые строки с рядом N'],
+    blocks: [
+      {
+        title: 'Ряд N',
+        body: 'Ряд な・に・ぬ・ね・の записывается как na, ni, nu, ne, no. Расположите пять пар в одном и том же порядке.',
+        examples: [{ japanese: 'なにぬねの', reading: 'naninuneno', meaning: 'Порядок ряда N.' }],
+      },
+      {
+        title: 'Сравните формы',
+        body: 'Рассматривайте ね и の как отдельные формы. Письменная подпись помогает проверить, какая из них стоит в строке.',
+        examples: [{ japanese: 'ねこ', reading: 'neko', meaning: 'Запись из ряда N и знакомого こ.' }],
+      },
+      {
+        title: 'Соедините ряды',
+        body: 'В строке たに сначала найдите た, затем に. Пробел внутрь такой записи не добавляется.',
+        examples: [{ japanese: 'たに', reading: 'tani', meaning: 'Две письменные подписи подряд.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-t'],
+    introducedItems: ['hiragana:な', 'hiragana:に', 'hiragana:ぬ', 'hiragana:ね', 'hiragana:の'],
+    exercisePrefix: 'hn',
+    exerciseDrafts: [
+      { prompt: 'Какая письменная подпись у знака ぬ?', options: ['nu', 'ne', 'no'], answerIndex: 0, explanation: 'ぬ записывается как nu.', hint: 'Это третий знак ряда N.' },
+      { prompt: 'Какой знак соответствует подписи ne?', options: ['ね', 'な', 'の'], answerIndex: 0, explanation: 'ne соответствует знаку ね.', hint: 'Ищите четвёртую пару.' },
+      { prompt: 'Какая запись соответствует ta + ni?', options: ['たに', 'にた', 'たぬ'], answerIndex: 0, explanation: 'ta → た, ni → に.', hint: 'Не меняйте порядок частей.' },
+      { prompt: 'Какое соответствие верно?', options: ['の — no', 'な — nu', 'ね — ni'], answerIndex: 0, explanation: 'の имеет подпись no.', hint: 'Это пятая пара ряда.' },
+      { prompt: 'Какой знак стоит вторым в ряду な・に・ぬ・ね・の?', options: ['に', 'ぬ', 'ね'], answerIndex: 0, explanation: 'Вторая позиция ряда N — に.', hint: 'Начните счёт от な.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-h',
+    moduleId: 'hiragana',
+    title: 'Ряд は・ひ・ふ・へ・ほ',
+    japaneseTitle: 'は・ひ・ふ・へ・ほ',
+    description: 'Добавьте ряд H и его письменные подписи к уже знакомой таблице.',
+    durationMinutes: 10,
+    skill: 'hiragana',
+    objectives: ['соотносить は、ひ、ふ、へ、ほ с письменными подписями', 'различать новые формы в строке'],
+    blocks: [
+      {
+        title: 'Ряд H',
+        body: 'Ряд は・ひ・ふ・へ・ほ записывается как ha, hi, fu, he, ho. Подпись fu запоминайте вместе со знаком ふ.',
+        examples: [{ japanese: 'はひふへほ', reading: 'hahifuheho', meaning: 'Порядок ряда H.' }],
+      },
+      {
+        title: 'Одна форма — одна подпись',
+        body: 'Письменная подпись не меняется от соседних знаков. Сначала определите форму, затем соедините подписи.',
+        examples: [{ japanese: 'ふね', reading: 'fune', meaning: 'Запись из рядов H и N.' }],
+      },
+      {
+        title: 'Проверьте порядок',
+        body: 'В конце ряда H стоят へ и ほ. Не заменяйте их похожими знакомыми формами.',
+        examples: [{ japanese: 'へほ', reading: 'heho', meaning: 'Две последние пары ряда H.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-n'],
+    introducedItems: ['hiragana:は', 'hiragana:ひ', 'hiragana:ふ', 'hiragana:へ', 'hiragana:ほ'],
+    exercisePrefix: 'hh',
+    exerciseDrafts: [
+      { prompt: 'Какая письменная подпись у ふ?', options: ['fu', 'hu', 'ho'], answerIndex: 0, explanation: 'Знак ふ записывается как fu.', hint: 'Это третья пара ряда H.' },
+      { prompt: 'Какой знак соответствует подписи hi?', options: ['ひ', 'は', 'ほ'], answerIndex: 0, explanation: 'hi соответствует знаку ひ.', hint: 'Это вторая позиция ряда.' },
+      { prompt: 'Какая запись соответствует fu + ne?', options: ['ふね', 'ねふ', 'ふの'], answerIndex: 0, explanation: 'fu → ふ и ne → ね.', hint: 'Сначала выберите форму ふ.' },
+      { prompt: 'Какое соответствие верно?', options: ['へ — he', 'ほ — hi', 'は — fu'], answerIndex: 0, explanation: 'へ имеет подпись he.', hint: 'Проверьте четвёртую позицию.' },
+      { prompt: 'Какой знак завершает ряд は・ひ・ふ・へ・ほ?', options: ['ほ', 'へ', 'ふ'], answerIndex: 0, explanation: 'Последний знак ряда H — ほ.', hint: 'Найдите пятую пару.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-m',
+    moduleId: 'hiragana',
+    title: 'Ряд ま・み・む・め・も',
+    japaneseTitle: 'ま・み・む・め・も',
+    description: 'Добавьте ряд M и закрепите чтение знакомых рядов вместе.',
+    durationMinutes: 10,
+    skill: 'hiragana',
+    objectives: ['соотносить ま、み、む、め、も с письменными подписями', 'читать строки из нескольких знакомых рядов'],
+    blocks: [
+      {
+        title: 'Ряд M',
+        body: 'Пять знаков ま・み・む・め・も записываются как ma, mi, mu, me, mo. Запишите их слева направо как одну таблицу.',
+        examples: [{ japanese: 'まみむめも', reading: 'mamimumemo', meaning: 'Порядок ряда M.' }],
+      },
+      {
+        title: 'Знакомые сочетания',
+        body: 'После ряда M можно собирать более длинные контролируемые строки. Каждая часть всё ещё состоит из уже показанных знаков.',
+        examples: [{ japanese: 'まこ', reading: 'mako', meaning: 'Строка из рядов M и K.' }],
+      },
+      {
+        title: 'Не угадывайте по форме',
+        body: 'Сверяйте каждую позицию: み и む отличаются не только местом в ряду, но и начертанием.',
+        examples: [{ japanese: 'みむ', reading: 'mimu', meaning: 'Две соседние формы для сравнения.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-h'],
+    introducedItems: ['hiragana:ま', 'hiragana:み', 'hiragana:む', 'hiragana:め', 'hiragana:も'],
+    exercisePrefix: 'hm',
+    exerciseDrafts: [
+      { prompt: 'Какая письменная подпись у む?', options: ['mu', 'mi', 'mo'], answerIndex: 0, explanation: 'む записывается как mu.', hint: 'Это третья позиция ряда M.' },
+      { prompt: 'Какой знак соответствует подписи me?', options: ['め', 'ま', 'も'], answerIndex: 0, explanation: 'me соответствует знаку め.', hint: 'Ищите четвёртую пару.' },
+      { prompt: 'Какая запись соответствует ma + ko?', options: ['まこ', 'こま', 'まけ'], answerIndex: 0, explanation: 'ma → ま и ko → こ.', hint: 'Сохраните порядок подписей.' },
+      { prompt: 'Какое соответствие верно?', options: ['み — mi', 'め — mo', 'ま — mu'], answerIndex: 0, explanation: 'み имеет подпись mi.', hint: 'Это второй знак ряда.' },
+      { prompt: 'Какой знак стоит перед も в ряду?', options: ['め', 'む', 'み'], answerIndex: 0, explanation: 'В конце ряда M стоят む・め・も.', hint: 'Посмотрите на две последние позиции.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-y-r',
+    moduleId: 'hiragana',
+    title: 'Ряды や・ゆ・よ и ら・り・る・れ・ろ',
+    japaneseTitle: 'や・ゆ・よ / ら・り・る・れ・ろ',
+    description: 'Добавьте неполный ряд Y и полный ряд R к таблице хираганы.',
+    durationMinutes: 11,
+    skill: 'hiragana',
+    objectives: ['соотносить знаки рядов Y и R с письменными подписями', 'замечать, что ряд Y содержит три формы'],
+    blocks: [
+      {
+        title: 'Три знака ряда Y',
+        body: 'В базовой таблице ряд Y содержит や・ゆ・よ: ya, yu, yo. Между ними нет отдельных базовых знаков для i и e.',
+        examples: [{ japanese: 'やゆよ', reading: 'yayuyo', meaning: 'Три базовые формы ряда Y.' }],
+      },
+      {
+        title: 'Пять знаков ряда R',
+        body: 'Ряд ら・り・る・れ・ろ записывается как ra, ri, ru, re, ro. Его удобно учить отдельной последовательностью из пяти форм.',
+        examples: [{ japanese: 'らりるれろ', reading: 'rarirurero', meaning: 'Порядок ряда R.' }],
+      },
+      {
+        title: 'Соберите строку',
+        body: 'В записи やま сначала найдите знак Y, затем M. Не дописывайте в строку отсутствующие позиции ряда Y.',
+        examples: [{ japanese: 'やま', reading: 'yama', meaning: 'Строка из двух знакомых рядов.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-m'],
+    introducedItems: ['hiragana:や', 'hiragana:ゆ', 'hiragana:よ', 'hiragana:ら', 'hiragana:り', 'hiragana:る', 'hiragana:れ', 'hiragana:ろ'],
+    exercisePrefix: 'hyr',
+    exerciseDrafts: [
+      { prompt: 'Какая подпись у знака ゆ?', options: ['yu', 'ya', 'yo'], answerIndex: 0, explanation: 'ゆ записывается как yu.', hint: 'Это средняя форма ряда Y.' },
+      { prompt: 'Какой знак соответствует подписи ri?', options: ['り', 'る', 'れ'], answerIndex: 0, explanation: 'ri соответствует знаку り.', hint: 'Это вторая пара ряда R.' },
+      { prompt: 'Сколько базовых знаков в ряду Y?', options: ['3', '4', '5'], answerIndex: 0, explanation: 'В базовой таблице ряда Y показаны や・ゆ・よ.', hint: 'Перечислите формы в блоке урока.' },
+      { prompt: 'Какая запись соответствует ya + ma?', options: ['やま', 'まや', 'ゆま'], answerIndex: 0, explanation: 'ya → や, ma → ま.', hint: 'Сначала найдите первую подпись.' },
+      { prompt: 'Какое соответствие верно?', options: ['ろ — ro', 'れ — ri', 'る — re'], answerIndex: 0, explanation: 'ろ имеет письменную подпись ro.', hint: 'Это последняя пара ряда R.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-w-n',
+    moduleId: 'hiragana',
+    title: 'Знаки わ・を・ん',
+    japaneseTitle: 'わ・を・ん',
+    description: 'Завершите базовую таблицу хираганы тремя заключительными формами.',
+    durationMinutes: 9,
+    skill: 'hiragana',
+    objectives: ['соотносить わ、を、ん с письменными подписями', 'узнавать завершение базовой таблицы'],
+    blocks: [
+      {
+        title: 'Три заключительные формы',
+        body: 'После рядов Y и R в базовой таблице остаются わ、を и ん. Их письменные подписи: wa, wo и n.',
+        examples: [{ japanese: 'わをん', reading: 'waon', meaning: 'Три заключительные формы базовой таблицы.' }],
+      },
+      {
+        title: 'Полная базовая таблица',
+        body: 'Теперь все 46 базовых знаков хираганы уже показаны. Это не включает знаки с диакритиками и малые формы: они будут отдельными шагами.',
+        examples: [{ japanese: 'わたし', reading: 'watashi', meaning: 'Контролируемая запись из базовых знаков.' }],
+      },
+      {
+        title: 'Проверьте конечную форму',
+        body: 'Знак ん не дополняйте гласной подписью. Он остаётся самостоятельной последней формой таблицы.',
+        examples: [{ japanese: 'ほん', reading: 'hon', meaning: 'Запись с заключительным знаком ん.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-y-r'],
+    introducedItems: ['hiragana:わ', 'hiragana:を', 'hiragana:ん', 'hiragana:base-complete'],
+    exercisePrefix: 'hwn',
+    exerciseDrafts: [
+      { prompt: 'Какая письменная подпись у ん?', options: ['n', 'no', 'nu'], answerIndex: 0, explanation: 'Знак ん имеет отдельную подпись n.', hint: 'Это заключительная форма таблицы.' },
+      { prompt: 'Какой знак соответствует подписи wo?', options: ['を', 'わ', 'ん'], answerIndex: 0, explanation: 'wo соответствует знаку を.', hint: 'Это средняя форма заключительной тройки.' },
+      { prompt: 'Какая запись соответствует wa + ta + shi?', options: ['わたし', 'わした', 'たわし'], answerIndex: 0, explanation: 'Последовательность собирается как わ・た・し.', hint: 'Сохраняйте порядок трёх подписей.' },
+      { prompt: 'Какая форма завершает базовую таблицу?', options: ['ん', 'を', 'わ'], answerIndex: 0, explanation: 'Базовая таблица заканчивается знаком ん.', hint: 'Посмотрите на последнюю форму урока.' },
+      { prompt: 'Какое соответствие верно?', options: ['わ — wa', 'を — n', 'ん — wo'], answerIndex: 0, explanation: 'わ имеет письменную подпись wa.', hint: 'Сверьте первую пару тройки.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-mixed-rows',
+    moduleId: 'hiragana',
+    title: 'Полная базовая хирагана',
+    japaneseTitle: 'あ〜ん',
+    description: 'Закрепите 46 базовых знаков в коротких контролируемых записях.',
+    durationMinutes: 12,
+    skill: 'reading',
+    objectives: ['находить базовые знаки из разных рядов', 'собирать письменную транскрипцию короткой записи'],
+    blocks: [
+      {
+        title: 'Таблица как опора',
+        body: 'Пользуйтесь полной таблицей как справкой: сначала найдите ряд, затем нужную позицию. Цель — узнавать форму, а не угадывать значение.',
+        examples: [{ japanese: 'さくら', reading: 'sakura', meaning: 'Контролируемая запись из базовых рядов.' }],
+      },
+      {
+        title: 'Порядок не меняется',
+        body: 'В строке たまに каждая подпись идёт вслед за своим знаком. Проверьте себя слева направо, не переставляя части.',
+        examples: [{ japanese: 'たまに', reading: 'tamani', meaning: 'Четыре базовые формы в одной строке.' }],
+      },
+      {
+        title: 'Граница этого шага',
+        body: 'Пока используйте только базовые формы. Знаки с отметками и малые формы получат отдельное объяснение дальше.',
+        examples: [{ japanese: 'みなと', reading: 'minato', meaning: 'Ещё одна контролируемая запись из базовых знаков.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-w-n'],
+    introducedItems: ['hiragana:base-retrieval'],
+    exercisePrefix: 'hmix',
+    exerciseDrafts: [
+      { prompt: 'Какая транскрипция у записи さくら?', japanese: 'さくら', options: ['sakura', 'sakara', 'sukara'], answerIndex: 0, explanation: 'さ・く・ら записываются как sa-ka-ra.', hint: 'Сверяйте три знака по порядку.' },
+      { prompt: 'Какая запись соответствует mi + na + to?', options: ['みなと', 'みにた', 'なみと'], answerIndex: 0, explanation: 'mi → み, na → な, to → と.', hint: 'Возьмите по одному знаку из каждого ряда.' },
+      { prompt: 'Какой знак в записи たまに соответствует подписи ni?', japanese: 'たまに', options: ['に', 'ま', 'た'], answerIndex: 0, explanation: 'Последний знак записи — に, то есть ni.', hint: 'Смотрите на последнюю позицию.' },
+      { prompt: 'Какая строка состоит только из базовых знаков?', options: ['ふね', 'がく', 'きゃく'], answerIndex: 0, explanation: 'ふね использует только базовые формы.', hint: 'Ищите строку без отметок и малых знаков.' },
+      { prompt: 'Какой знак относится к ряду R?', options: ['れ', 'ぬ', 'ほ'], answerIndex: 0, explanation: 'れ — четвёртая форма ряда R.', hint: 'Вспомните ряд ら・り・る・れ・ろ.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-diacritics',
+    moduleId: 'hiragana',
+    title: 'Отметки ゛ и ゜',
+    japaneseTitle: 'が・ざ・だ・ば・ぱ',
+    description: 'Добавьте ряды с дакутэн и хандакутэн к базовой хирагане.',
+    durationMinutes: 12,
+    skill: 'hiragana',
+    objectives: ['узнавать пять рядов с отметками', 'отличать базовую форму от формы с отметкой'],
+    blocks: [
+      {
+        title: 'Дакутэн',
+        body: 'Две короткие отметки меняют форму рядов K, S, T и H: получаются ряды が、ざ、だ и ば. Учите каждую пару как отдельную запись.',
+        examples: [{ japanese: 'か / が', reading: 'ka / ga', meaning: 'Базовая форма и форма с дакутэн.' }],
+      },
+      {
+        title: 'Хандакутэн',
+        body: 'Кружок в ряду H образует ぱ、ぴ、ぷ、ぺ、ぽ. Не смешивайте эту отметку с двумя короткими штрихами.',
+        examples: [{ japanese: 'は / ば / ぱ', reading: 'ha / ba / pa', meaning: 'Три формы с общей основой.' }],
+      },
+      {
+        title: 'Письменная проверка',
+        body: 'В строке かぎ найдите базовый か и форму ぎ с отметками. Сначала проверяйте сам знак, затем подпись.',
+        examples: [{ japanese: 'かぎ', reading: 'kagi', meaning: 'Запись с базовой и отмеченной формой.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-mixed-rows'],
+    introducedItems: ['hiragana:が-ご', 'hiragana:ざ-ぞ', 'hiragana:だ-ど', 'hiragana:ば-ぼ', 'hiragana:ぱ-ぽ'],
+    exercisePrefix: 'hdi',
+    exerciseDrafts: [
+      { prompt: 'Какой знак образован от か с двумя отметками?', options: ['が', 'か', 'ぱ'], answerIndex: 0, explanation: 'Две отметки превращают か в が.', hint: 'Сравните основу и отметку.' },
+      { prompt: 'Какова подпись знака ぺ?', options: ['pe', 'be', 'he'], answerIndex: 0, explanation: 'ぺ относится к ряду P: pe.', hint: 'Ищите форму с кружком.' },
+      { prompt: 'Какая запись соответствует ka + gi?', options: ['かぎ', 'がき', 'かき'], answerIndex: 0, explanation: 'ka → か, gi → ぎ.', hint: 'Вторая форма имеет две отметки.' },
+      { prompt: 'Какая тройка показывает одну основу в трёх формах?', options: ['は・ば・ぱ', 'は・ひ・ふ', 'ば・ざ・だ'], answerIndex: 0, explanation: 'Все три формы строятся от は.', hint: 'Ищите одинаковый основной знак.' },
+      { prompt: 'Какой ряд создаёт хандакутэн?', options: ['ぱ・ぴ・ぷ・ぺ・ぽ', 'が・ぎ・ぐ・げ・ご', 'ざ・じ・ず・ぜ・ぞ'], answerIndex: 0, explanation: 'Кружок образует ряд P.', hint: 'Вспомните пример は / ば / ぱ.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-combinations',
+    moduleId: 'hiragana',
+    title: 'Малые ゃ・ゅ・ょ в сочетаниях',
+    japaneseTitle: 'きゃ・きゅ・きょ',
+    description: 'Научитесь видеть две формы как одно контролируемое письменное сочетание.',
+    durationMinutes: 12,
+    skill: 'hiragana',
+    objectives: ['распознавать малые ゃ、ゅ、ょ рядом со знаком ряда I', 'соотносить распространённые сочетания с письменными подписями'],
+    blocks: [
+      {
+        title: 'Малая форма важна',
+        body: 'В きゃ второй знак меньше обычного や. Такая пара записывается как одно сочетание kya, а не как две независимые базовые формы.',
+        examples: [{ japanese: 'きゃ・きゅ・きょ', reading: 'kya / kyu / kyo', meaning: 'Три сочетания ряда K.' }],
+      },
+      {
+        title: 'Другие ряды',
+        body: 'Тот же письменный принцип встречается в しゃ、ちゃ、にゃ、ひゃ、みゃ、りゃ и формах с отметками. Запоминайте сочетание целиком.',
+        examples: [{ japanese: 'しゃしん', reading: 'shashin', meaning: 'Контролируемая запись с сочетанием しゃ.' }],
+      },
+      {
+        title: 'Не увеличивайте знак',
+        body: 'Большое や меняет структуру записи. При сравнении смотрите именно на размер второй формы.',
+        examples: [{ japanese: 'きや / きゃ', reading: 'kiya / kya', meaning: 'Две разные письменные записи.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-diacritics'],
+    introducedItems: ['hiragana:ゃ', 'hiragana:ゅ', 'hiragana:ょ', 'hiragana:yoon'],
+    exercisePrefix: 'hyo',
+    exerciseDrafts: [
+      { prompt: 'Какая подпись у сочетания きょ?', options: ['kyo', 'kiyo', 'kya'], answerIndex: 0, explanation: 'きょ записывается как kyo.', hint: 'Вторая форма малая よ.' },
+      { prompt: 'Какая запись соответствует sha?', options: ['しゃ', 'しや', 'さや'], answerIndex: 0, explanation: 'sha соответствует сочетанию しゃ.', hint: 'Ищите малую ゃ.' },
+      { prompt: 'Что отличает きゃ от きや?', options: ['Размер второй формы', 'Первый знак', 'Количество точек'], answerIndex: 0, explanation: 'В きゃ второй знак — малая ゃ.', hint: 'Сравните вторую форму в парах.' },
+      { prompt: 'Какая запись содержит малую ょ?', options: ['ちょ', 'ちよ', 'ちゆ'], answerIndex: 0, explanation: 'ちょ состоит из ち и малой ょ.', hint: 'Ищите маленькую последнюю форму.' },
+      { prompt: 'Какая строка использует сочетание с малой формой?', options: ['しゃしん', 'さしん', 'しやしん'], answerIndex: 0, explanation: 'В しゃしん начало — сочетание しゃ.', hint: 'Проверьте первые два знака.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-small-tsu',
+    moduleId: 'hiragana',
+    title: 'Малый っ внутри записи',
+    japaneseTitle: 'っ',
+    description: 'Научитесь замечать малый っ как отдельную часть письменной структуры.',
+    durationMinutes: 10,
+    skill: 'orthography',
+    objectives: ['отличать малый っ от базового つ', 'сравнивать контролируемые записи с разной структурой'],
+    blocks: [
+      {
+        title: 'Меньшая форма',
+        body: 'Малый っ выглядит как уменьшенная форма つ. Он занимает отдельное место в записи, но не заменяет полный знак つ.',
+        examples: [{ japanese: 'つ / っ', reading: 'tsu / small tsu', meaning: 'Базовая и малая формы рядом.' }],
+      },
+      {
+        title: 'Сравните пары',
+        body: 'В きって есть малый っ, а в きて его нет. Сначала найдите все знаки, затем сравните структуру строки.',
+        examples: [{ japanese: 'きて / きって', reading: 'kite / kitte', meaning: 'Две записи с разным набором форм.' }],
+      },
+      {
+        title: 'Не заменяйте つ',
+        body: 'Полный つ и малый っ не взаимозаменяемы. В упражнении проверяется только показанная письменная форма.',
+        examples: [{ japanese: 'がっこう', reading: 'gakkou', meaning: 'Контролируемая запись с малым っ.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-combinations'],
+    introducedItems: ['hiragana:っ'],
+    exercisePrefix: 'hsmall',
+    exerciseDrafts: [
+      { prompt: 'Какая форма является малым っ?', options: ['っ', 'つ', 'ろ'], answerIndex: 0, explanation: 'Малый っ — уменьшенная форма つ.', hint: 'Сравните размер знака.' },
+      { prompt: 'Какая запись содержит малый っ?', options: ['きって', 'きて', 'きつて'], answerIndex: 0, explanation: 'В きって между き и て стоит малый っ.', hint: 'Ищите маленький знак.' },
+      { prompt: 'Чем きって отличается от きて в этой записи?', options: ['В ней есть малый っ', 'В ней нет き', 'В ней есть катакана'], answerIndex: 0, explanation: 'В きって добавлен малый っ.', hint: 'Сравните строки посередине.' },
+      { prompt: 'Какую форму нельзя заменять малым っ?', options: ['Полный つ', 'Малую ゃ', 'Знак ー'], answerIndex: 0, explanation: 'Полный つ и малый っ выполняют разные роли в записи.', hint: 'Вернитесь к первой паре урока.' },
+      { prompt: 'Какая строка соответствует ga + small tsu + ko + u?', options: ['がっこう', 'がつこう', 'かっこう'], answerIndex: 0, explanation: 'В записи показаны が・っ・こ・う.', hint: 'Проверьте каждую форму слева направо.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'hiragana-long-vowels-punctuation',
+    moduleId: 'hiragana',
+    title: 'Длинные записи и знак 。',
+    japaneseTitle: 'おう・えい・。',
+    description: 'Разберите длинные письменные последовательности и базовую точку предложения.',
+    durationMinutes: 11,
+    skill: 'orthography',
+    objectives: ['замечать добавленные гласные в контролируемых записях', 'ставить знак 。 в конце показанной строки'],
+    blocks: [
+      {
+        title: 'Дополнительная гласная',
+        body: 'В некоторых хираганных записях последовательность содержит дополнительную гласную: например, おう и えい. Сохраняйте все знаки в том виде, как они показаны.',
+        examples: [{ japanese: 'おとうさん', reading: 'otousan', meaning: 'Контролируемая запись с おう.' }],
+      },
+      {
+        title: 'Точка предложения',
+        body: 'Знак 。 завершает показанную письменную строку. Он ставится после последнего знака, без добавочного пробела перед ним.',
+        examples: [{ japanese: 'これはほんです。', reading: 'kore wa hon desu.', meaning: 'Контролируемая строка со знаком 。' }],
+      },
+      {
+        title: 'Сначала форма, потом смысл',
+        body: 'На этом шаге важна структура записи: не убирайте знаки из последовательности и не меняйте место 。.',
+        examples: [{ japanese: 'せんせい。', reading: 'sensei.', meaning: 'Запись с えい и завершающим знаком.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['hiragana-small-tsu'],
+    introducedItems: ['orthography:おう', 'orthography:えい', 'punctuation:。'],
+    exercisePrefix: 'hlong',
+    exerciseDrafts: [
+      { prompt: 'Какая запись сохраняет последовательность おう?', options: ['おとうさん', 'おとさん', 'おとおさん'], answerIndex: 0, explanation: 'В показанной записи есть последовательность おう.', hint: 'Ищите お сразу после と.' },
+      { prompt: 'Где ставится знак 。 в показанной строке?', options: ['После последнего знака', 'Перед первым знаком', 'Внутри слова'], answerIndex: 0, explanation: '。 завершает строку после последнего знака.', hint: 'Сверьтесь с примером.' },
+      { prompt: 'Какая запись содержит えい?', options: ['せんせい', 'せんさい', 'せんえ'], answerIndex: 0, explanation: 'В せんせい есть последовательность えい.', hint: 'Проверьте две последние формы.' },
+      { prompt: 'Какая строка оформлена как показанное предложение?', options: ['これはほんです。', '。これはほんです', 'これは。ほんです'], answerIndex: 0, explanation: 'Знак 。 стоит в конце целой строки.', hint: 'Не ставьте его внутрь записи.' },
+      { prompt: 'Что следует сохранить в контролируемой записи?', options: ['Все показанные знаки', 'Только первый знак', 'Только латиницу'], answerIndex: 0, explanation: 'Письменная последовательность проверяется целиком.', hint: 'Вернитесь к первому блоку.' },
+    ],
+  }),
+];
+
+const katakanaLessons: Lesson[] = [
+  authoredLesson({
+    id: 'katakana-k-s',
+    moduleId: 'katakana',
+    title: 'Ряды カ・キ・ク・ケ・コ и サ・シ・ス・セ・ソ',
+    japaneseTitle: 'カ・キ・ク・ケ・コ / サ・シ・ス・セ・ソ',
+    description: 'Добавьте первые десять согласных форм катаканы к уже знакомым гласным.',
+    durationMinutes: 12,
+    skill: 'katakana',
+    objectives: ['соотносить ряды K и S катаканы с письменными подписями', 'отличать формы катаканы от хираганы'],
+    blocks: [
+      {
+        title: 'Два новых ряда',
+        body: 'После ア・イ・ウ・エ・オ запомните カ・キ・ク・ケ・コ и サ・シ・ス・セ・ソ. Подписи сохраняются: ka–ko и sa, shi, su, se, so.',
+        examples: [{ japanese: 'カキクケコ', reading: 'kakikukeko', meaning: 'Порядок ряда K катаканы.' }],
+      },
+      {
+        title: 'Та же подпись, другая форма',
+        body: 'カ и か имеют одну письменную подпись ka, но это разные знаки. Сверяйте форму именно выбранной системы письма.',
+        examples: [{ japanese: 'さ / サ', reading: 'sa / sa', meaning: 'Два разных начертания с одной подписью.' }],
+      },
+      {
+        title: 'Соберите строку',
+        body: 'В записи スコ сначала определите ス, затем コ. Не переносите внутрь строки пробелы.',
+        examples: [{ japanese: 'スコ', reading: 'suko', meaning: 'Две формы катаканы в одной записи.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-vowels'],
+    introducedItems: ['katakana:カ-コ', 'katakana:サ-ソ'],
+    exercisePrefix: 'kks',
+    exerciseDrafts: [
+      { prompt: 'Какая подпись у знака シ?', options: ['shi', 'su', 'se'], answerIndex: 0, explanation: 'シ записывается как shi.', hint: 'Это вторая форма ряда S.' },
+      { prompt: 'Какой знак катаканы соответствует подписи ke?', options: ['ケ', 'キ', 'コ'], answerIndex: 0, explanation: 'ke соответствует знаку ケ.', hint: 'Ищите четвёртую пару ряда K.' },
+      { prompt: 'Какая запись соответствует su + ko?', options: ['スコ', 'コス', 'サコ'], answerIndex: 0, explanation: 'su → ス, ko → コ.', hint: 'Сохраняйте порядок двух частей.' },
+      { prompt: 'Какое соответствие верно?', options: ['サ — sa', 'セ — so', 'ク — ki'], answerIndex: 0, explanation: 'サ имеет подпись sa.', hint: 'Проверьте первую пару ряда S.' },
+      { prompt: 'Какая пара показывает разные системы письма с подписью ka?', options: ['か / カ', 'か / キ', 'サ / さ'], answerIndex: 0, explanation: 'か и カ имеют общую подпись ka.', hint: 'Ищите одинаковую подпись и разные формы.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-t-n',
+    moduleId: 'katakana',
+    title: 'Ряды タ・チ・ツ・テ・ト и ナ・ニ・ヌ・ネ・ノ',
+    japaneseTitle: 'タ・チ・ツ・テ・ト / ナ・ニ・ヌ・ネ・ノ',
+    description: 'Добавьте ряды T и N катаканы и закрепите подписи chi и tsu.',
+    durationMinutes: 12,
+    skill: 'katakana',
+    objectives: ['соотносить формы рядов T и N с письменными подписями', 'собирать короткие записи из изученной катаканы'],
+    blocks: [
+      {
+        title: 'Ряд T',
+        body: 'Ряд タ・チ・ツ・テ・ト записывается как ta, chi, tsu, te, to. Запоминайте チ и ツ вместе с их полными подписями.',
+        examples: [{ japanese: 'タチツテト', reading: 'tachitsuteto', meaning: 'Порядок ряда T катаканы.' }],
+      },
+      {
+        title: 'Ряд N',
+        body: 'Ряд ナ・ニ・ヌ・ネ・ノ записывается как na, ni, nu, ne, no. Каждая форма занимает свою позицию в таблице.',
+        examples: [{ japanese: 'ナニヌネノ', reading: 'naninuneno', meaning: 'Порядок ряда N катаканы.' }],
+      },
+      {
+        title: 'Проверьте запись',
+        body: 'В строке テスト сначала сопоставьте каждую форму с подписью. Значение слова здесь не нужно для проверки порядка.',
+        examples: [{ japanese: 'テスト', reading: 'tesuto', meaning: 'Контролируемая строка из рядов T и S.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-k-s'],
+    introducedItems: ['katakana:タ-ト', 'katakana:ナ-ノ'],
+    exercisePrefix: 'ktn',
+    exerciseDrafts: [
+      { prompt: 'Какая подпись у знака ツ?', options: ['tsu', 'chi', 'to'], answerIndex: 0, explanation: 'ツ записывается как tsu.', hint: 'Это третья пара ряда T.' },
+      { prompt: 'Какой знак соответствует подписи ne?', options: ['ネ', 'ヌ', 'ノ'], answerIndex: 0, explanation: 'ne соответствует знаку ネ.', hint: 'Ищите четвёртую форму ряда N.' },
+      { prompt: 'Какая запись соответствует te + su + to?', options: ['テスト', 'テソト', 'トステ'], answerIndex: 0, explanation: 'te → テ, su → ス, to → ト.', hint: 'Соберите форму за формой.' },
+      { prompt: 'Какое соответствие верно?', options: ['チ — chi', 'タ — tsu', 'ノ — nu'], answerIndex: 0, explanation: 'チ имеет подпись chi.', hint: 'Проверьте вторую пару ряда T.' },
+      { prompt: 'Какой знак завершает ряд ナ・ニ・ヌ・ネ・ノ?', options: ['ノ', 'ネ', 'ヌ'], answerIndex: 0, explanation: 'Последний знак ряда N — ノ.', hint: 'Посмотрите на пятую позицию.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-h-m',
+    moduleId: 'katakana',
+    title: 'Ряды ハ・ヒ・フ・ヘ・ホ и マ・ミ・ム・メ・モ',
+    japaneseTitle: 'ハ・ヒ・フ・ヘ・ホ / マ・ミ・ム・メ・モ',
+    description: 'Добавьте ряды H и M катаканы к полной рабочей таблице.',
+    durationMinutes: 12,
+    skill: 'katakana',
+    objectives: ['соотносить формы рядов H и M с письменными подписями', 'различать новые формы в контролируемой строке'],
+    blocks: [
+      {
+        title: 'Ряд H',
+        body: 'Запомните ハ・ヒ・フ・ヘ・ホ: ha, hi, fu, he, ho. Подпись fu связана именно с フ.',
+        examples: [{ japanese: 'ハヒフヘホ', reading: 'hahifuheho', meaning: 'Порядок ряда H катаканы.' }],
+      },
+      {
+        title: 'Ряд M',
+        body: 'Ряд マ・ミ・ム・メ・モ образует последовательность ma, mi, mu, me, mo. Учите форму и подпись парой.',
+        examples: [{ japanese: 'マミムメモ', reading: 'mamimumemo', meaning: 'Порядок ряда M катаканы.' }],
+      },
+      {
+        title: 'Сравнение форм',
+        body: 'В записи ホーム каждая форма остаётся отдельной: знак долготы будет разобран дальше, сейчас найдите знакомые ホ и ム.',
+        examples: [{ japanese: 'ホム', reading: 'homu', meaning: 'Контролируемая строка без знака долготы.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-t-n'],
+    introducedItems: ['katakana:ハ-ホ', 'katakana:マ-モ'],
+    exercisePrefix: 'khm',
+    exerciseDrafts: [
+      { prompt: 'Какая подпись у знака フ?', options: ['fu', 'hu', 'ho'], answerIndex: 0, explanation: 'Форма フ имеет подпись fu.', hint: 'Это третья пара ряда H.' },
+      { prompt: 'Какой знак соответствует подписи mi?', options: ['ミ', 'ム', 'メ'], answerIndex: 0, explanation: 'mi соответствует знаку ミ.', hint: 'Ищите вторую форму ряда M.' },
+      { prompt: 'Какая запись соответствует ha + mi?', options: ['ハミ', 'ミハ', 'ヒミ'], answerIndex: 0, explanation: 'ha → ハ, mi → ミ.', hint: 'Сохраните порядок подписей.' },
+      { prompt: 'Какое соответствие верно?', options: ['ホ — ho', 'ヘ — hi', 'マ — mu'], answerIndex: 0, explanation: 'ホ имеет письменную подпись ho.', hint: 'Проверьте пятую пару ряда H.' },
+      { prompt: 'Какой знак стоит перед モ в ряду M?', options: ['メ', 'ム', 'ミ'], answerIndex: 0, explanation: 'В конце ряда M стоят ム・メ・モ.', hint: 'Посмотрите на последние позиции.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-y-r-w-n',
+    moduleId: 'katakana',
+    title: 'Ряды ヤ・ユ・ヨ, ラ〜ロ, ワ・ヲ・ン',
+    japaneseTitle: 'ヤ・ユ・ヨ / ラ〜ロ / ワ・ヲ・ン',
+    description: 'Завершите 46 базовых форм катаканы.',
+    durationMinutes: 12,
+    skill: 'katakana',
+    objectives: ['соотносить формы Y, R, W и ン с письменными подписями', 'узнавать полную базовую таблицу катаканы'],
+    blocks: [
+      {
+        title: 'Короткий ряд Y',
+        body: 'Базовый ряд Y содержит ヤ・ユ・ヨ: ya, yu, yo. В нём нет отдельных базовых форм для i и e.',
+        examples: [{ japanese: 'ヤユヨ', reading: 'yayuyo', meaning: 'Три базовые формы ряда Y.' }],
+      },
+      {
+        title: 'Ряд R и завершение',
+        body: 'Ряд ラ・リ・ル・レ・ロ дополняется заключительными ワ、ヲ и ン. Так завершается набор 46 базовых форм катаканы.',
+        examples: [{ japanese: 'ラリルレロ', reading: 'rarirurero', meaning: 'Порядок ряда R.' }],
+      },
+      {
+        title: 'Контролируемая строка',
+        body: 'В записи ワタシ найдите каждую форму по таблице. Значение будет обсуждаться только в последующих письменных моделях.',
+        examples: [{ japanese: 'ワタシ', reading: 'watashi', meaning: 'Строка из базовой катаканы.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-h-m'],
+    introducedItems: ['katakana:ヤ-ヨ', 'katakana:ラ-ロ', 'katakana:ワ', 'katakana:ヲ', 'katakana:ン', 'katakana:base-complete'],
+    exercisePrefix: 'kyrwn',
+    exerciseDrafts: [
+      { prompt: 'Какая подпись у ユ?', options: ['yu', 'ya', 'yo'], answerIndex: 0, explanation: 'ユ записывается как yu.', hint: 'Это средняя форма ряда Y.' },
+      { prompt: 'Какой знак соответствует подписи re?', options: ['レ', 'リ', 'ロ'], answerIndex: 0, explanation: 're соответствует знаку レ.', hint: 'Ищите четвёртую пару ряда R.' },
+      { prompt: 'Какая форма завершает базовую таблицу катаканы?', options: ['ン', 'ヲ', 'ワ'], answerIndex: 0, explanation: 'В таблице последней формой является ン.', hint: 'Посмотрите на заключительную тройку.' },
+      { prompt: 'Какая запись соответствует wa + ta + shi?', options: ['ワタシ', 'ワシタ', 'タワシ'], answerIndex: 0, explanation: 'wa → ワ, ta → タ, shi → シ.', hint: 'Соберите формы слева направо.' },
+      { prompt: 'Сколько базовых знаков в ряду Y?', options: ['3', '4', '5'], answerIndex: 0, explanation: 'В базовом ряду Y есть ヤ・ユ・ヨ.', hint: 'Перечислите формы ряда.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-mixed-rows',
+    moduleId: 'katakana',
+    title: 'Полная базовая катакана',
+    japaneseTitle: 'ア〜ン',
+    description: 'Закрепите 46 базовых форм катаканы в коротких контролируемых записях.',
+    durationMinutes: 12,
+    skill: 'reading',
+    objectives: ['находить базовые формы катаканы из разных рядов', 'собирать письменную транскрипцию без перестановок'],
+    blocks: [
+      {
+        title: 'Таблица для проверки',
+        body: 'Полная таблица — это справка, а не экзамен. Находите ряд и позицию, затем сверяйте запись.',
+        examples: [{ japanese: 'カメラ', reading: 'kamera', meaning: 'Контролируемая строка из базовой катаканы.' }],
+      },
+      {
+        title: 'Одинаковая подпись, разная система',
+        body: 'Катакана и хирагана могут иметь одинаковую письменную подпись. Здесь проверяется только выбор нужного начертания.',
+        examples: [{ japanese: 'カメラ / かめら', reading: 'kamera / kamera', meaning: 'Две системы письма с одинаковой транскрипцией.' }],
+      },
+      {
+        title: 'Граница шага',
+        body: 'Пока используйте базовые формы без отметок, малых знаков и знака ー. Они будут введены отдельно.',
+        examples: [{ japanese: 'ミナト', reading: 'minato', meaning: 'Ещё одна запись из базовых форм.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-y-r-w-n'],
+    introducedItems: ['katakana:base-retrieval'],
+    exercisePrefix: 'kmix',
+    exerciseDrafts: [
+      { prompt: 'Какая транскрипция у записи カメラ?', japanese: 'カメラ', options: ['kamera', 'kamira', 'komera'], answerIndex: 0, explanation: 'カ・メ・ラ записываются как ka-me-ra.', hint: 'Сверьте три формы по таблице.' },
+      { prompt: 'Какая запись соответствует mi + na + to?', options: ['ミナト', 'ミニタ', 'ナミト'], answerIndex: 0, explanation: 'mi → ミ, na → ナ, to → ト.', hint: 'Берите по одному знаку из каждого ряда.' },
+      { prompt: 'Какая строка состоит только из базовой катаканы?', options: ['フネ', 'ガク', 'キャク'], answerIndex: 0, explanation: 'フネ использует только базовые формы.', hint: 'Ищите строку без отметок и малых знаков.' },
+      { prompt: 'Какой знак относится к ряду R?', options: ['レ', 'ヌ', 'ホ'], answerIndex: 0, explanation: 'レ — четвёртая форма ряда R.', hint: 'Вспомните ラ・リ・ル・レ・ロ.' },
+      { prompt: 'Какая пара показывает одну запись в двух системах?', options: ['カメラ / かめら', 'カメラ / かめル', 'カメラ / カメラ'], answerIndex: 0, explanation: 'Формы слева и справа относятся к разным системам письма.', hint: 'Сверьте каждый знак справа.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-diacritics',
+    moduleId: 'katakana',
+    title: 'Катакана с отметками',
+    japaneseTitle: 'ガ・ザ・ダ・バ・パ',
+    description: 'Добавьте пять рядов с дакутэн и хандакутэн к базовой катакане.',
+    durationMinutes: 12,
+    skill: 'katakana',
+    objectives: ['узнавать формы катаканы с двумя штрихами и кружком', 'различать базовые и отмеченные формы'],
+    blocks: [
+      {
+        title: 'Две отметки',
+        body: 'Две короткие отметки образуют ряды ガ、ザ、ダ и バ. Сверяйте основную форму и отметку вместе.',
+        examples: [{ japanese: 'カ / ガ', reading: 'ka / ga', meaning: 'Базовая и отмеченная формы катаканы.' }],
+      },
+      {
+        title: 'Кружок',
+        body: 'Кружок на формах ряда H образует パ、ピ、プ、ペ、ポ. Это отдельный ряд, который нельзя смешивать с バ、ビ、ブ、ベ、ボ.',
+        examples: [{ japanese: 'ハ / バ / パ', reading: 'ha / ba / pa', meaning: 'Три формы с одной основой.' }],
+      },
+      {
+        title: 'Соберите запись',
+        body: 'В строке ガク найдите форму с двумя штрихами, затем базовую форму. Письменная проверка идёт по всем знакам.',
+        examples: [{ japanese: 'ガク', reading: 'gaku', meaning: 'Отмеченная и базовая формы рядом.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-mixed-rows'],
+    introducedItems: ['katakana:ガ-ゴ', 'katakana:ザ-ゾ', 'katakana:ダ-ド', 'katakana:バ-ボ', 'katakana:パ-ポ'],
+    exercisePrefix: 'kdi',
+    exerciseDrafts: [
+      { prompt: 'Какой знак образован от カ с двумя отметками?', options: ['ガ', 'カ', 'パ'], answerIndex: 0, explanation: 'Две отметки превращают カ в ガ.', hint: 'Сравните основу и отметку.' },
+      { prompt: 'Какая подпись у знака ペ?', options: ['pe', 'be', 'he'], answerIndex: 0, explanation: 'ペ относится к ряду P: pe.', hint: 'Ищите форму с кружком.' },
+      { prompt: 'Какая запись соответствует ga + ku?', options: ['ガク', 'カグ', 'ガキ'], answerIndex: 0, explanation: 'ga → ガ, ku → ク.', hint: 'Первая форма имеет две отметки.' },
+      { prompt: 'Какая тройка показывает одну основу в трёх формах?', options: ['ハ・バ・パ', 'ハ・ヒ・フ', 'バ・ザ・ダ'], answerIndex: 0, explanation: 'Все три формы строятся от ハ.', hint: 'Ищите одинаковую основу.' },
+      { prompt: 'Какой ряд создаёт хандакутэн?', options: ['パ・ピ・プ・ペ・ポ', 'ガ・ギ・グ・ゲ・ゴ', 'ザ・ジ・ズ・ゼ・ゾ'], answerIndex: 0, explanation: 'Кружок образует ряд P.', hint: 'Вспомните пример ハ / バ / パ.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-combinations',
+    moduleId: 'katakana',
+    title: 'Малые ャ・ュ・ョ в сочетаниях',
+    japaneseTitle: 'キャ・シュ・チョ',
+    description: 'Читайте две формы как одно контролируемое сочетание катаканы.',
+    durationMinutes: 12,
+    skill: 'katakana',
+    objectives: ['распознавать малые ャ、ュ、ョ в сочетании с формой ряда I', 'отличать сочетание от двух полных знаков'],
+    blocks: [
+      {
+        title: 'Малая вторая форма',
+        body: 'В キャ второй знак меньше полного ヤ. Такая запись соответствует одной письменной подписи kya.',
+        examples: [{ japanese: 'キャ・キュ・キョ', reading: 'kya / kyu / kyo', meaning: 'Три сочетания ряда K.' }],
+      },
+      {
+        title: 'Другие сочетания',
+        body: 'Тот же принцип используется в シャ、ジャ、チャ、ニャ、ヒャ、ミャ、リャ и формах с отметками. Проверяйте размер второй формы.',
+        examples: [{ japanese: 'シャシン', reading: 'shashin', meaning: 'Контролируемая строка с сочетанием シャ.' }],
+      },
+      {
+        title: 'Не заменяйте полную форму',
+        body: 'キヤ и キャ — разные записи: у второй пары малая форма. В упражнениях выбирайте только показанную структуру.',
+        examples: [{ japanese: 'キヤ / キャ', reading: 'kiya / kya', meaning: 'Две разные письменные структуры.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-diacritics'],
+    introducedItems: ['katakana:ャ', 'katakana:ュ', 'katakana:ョ', 'katakana:yoon'],
+    exercisePrefix: 'kyo',
+    exerciseDrafts: [
+      { prompt: 'Какая подпись у сочетания キョ?', options: ['kyo', 'kiyo', 'kya'], answerIndex: 0, explanation: 'キョ записывается как kyo.', hint: 'Вторая форма — малая ョ.' },
+      { prompt: 'Какая запись соответствует sha?', options: ['シャ', 'シヤ', 'サヤ'], answerIndex: 0, explanation: 'sha соответствует сочетанию シャ.', hint: 'Ищите малую ャ.' },
+      { prompt: 'Что отличает キャ от キヤ?', options: ['Размер второй формы', 'Первый знак', 'Количество штрихов'], answerIndex: 0, explanation: 'В キャ второй знак — малая ャ.', hint: 'Сравните вторую форму.' },
+      { prompt: 'Какая запись содержит малую ョ?', options: ['チョ', 'チヨ', 'チユ'], answerIndex: 0, explanation: 'チョ состоит из チ и малой ョ.', hint: 'Ищите маленький второй знак.' },
+      { prompt: 'Какая строка начинается с сочетания?', options: ['シャシン', 'サシン', 'シヤシン'], answerIndex: 0, explanation: 'В первой записи начало — сочетание シャ.', hint: 'Проверьте первые два знака.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-small-symbols',
+    moduleId: 'katakana',
+    title: 'Малые гласные и малый ッ',
+    japaneseTitle: 'ァ・ィ・ゥ・ェ・ォ / ッ',
+    description: 'Добавьте малые формы, которые встречаются в контролируемых записях катаканой.',
+    durationMinutes: 11,
+    skill: 'orthography',
+    objectives: ['отличать малые гласные от полных форм', 'отличать малый ッ от полного ツ'],
+    blocks: [
+      {
+        title: 'Малые гласные',
+        body: 'Формы ァ・ィ・ゥ・ェ・ォ меньше полных ア・イ・ウ・エ・オ. В показанных записях они образуют часть целого сочетания.',
+        examples: [{ japanese: 'ファ', reading: 'fa', meaning: 'Контролируемое сочетание с малой ァ.' }],
+      },
+      {
+        title: 'Малый ッ',
+        body: 'Малый ッ отличается размером от полного ツ. Он занимает отдельное место внутри контролируемой записи.',
+        examples: [{ japanese: 'キッテ', reading: 'kitte', meaning: 'Запись с малым ッ.' }],
+      },
+      {
+        title: 'Проверьте размер',
+        body: 'Сравнивайте второй знак в каждой паре. Полные и малые формы не взаимозаменяемы.',
+        examples: [{ japanese: 'ア / ァ', reading: 'a / small a', meaning: 'Полная и малая формы рядом.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-combinations'],
+    introducedItems: ['katakana:ァ', 'katakana:ィ', 'katakana:ゥ', 'katakana:ェ', 'katakana:ォ', 'katakana:ッ'],
+    exercisePrefix: 'ksmall',
+    exerciseDrafts: [
+      { prompt: 'Какая форма является малой ァ?', options: ['ァ', 'ア', 'ォ'], answerIndex: 0, explanation: 'ァ — малая форма А.', hint: 'Сравните размер формы.' },
+      { prompt: 'Какая запись содержит малый ッ?', options: ['キッテ', 'キツテ', 'キテ'], answerIndex: 0, explanation: 'В キッテ между キ и テ стоит малый ッ.', hint: 'Ищите маленький знак.' },
+      { prompt: 'Какая запись использует малую ァ?', options: ['ファ', 'フア', 'フヤ'], answerIndex: 0, explanation: 'В ファ второй знак — малая ァ.', hint: 'Сравните второй знак.' },
+      { prompt: 'Что нельзя заменять малым ッ?', options: ['Полный ツ', 'Знак ー', 'Малую ャ'], answerIndex: 0, explanation: 'Полный ツ и малый ッ — разные формы.', hint: 'Вернитесь к сравнению ツ / ッ.' },
+      { prompt: 'Какая пара показывает полную и малую форму?', options: ['ア / ァ', 'ア / イ', 'ッ / ョ'], answerIndex: 0, explanation: 'В первой паре одна форма полная, другая малая.', hint: 'Проверьте размер второго знака.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-long-vowels',
+    moduleId: 'katakana',
+    title: 'Знак ー в катакане',
+    japaneseTitle: 'ー',
+    description: 'Научитесь видеть знак ー как отдельную часть показанной записи.',
+    durationMinutes: 10,
+    skill: 'orthography',
+    objectives: ['находить знак ー внутри катаканной строки', 'не заменять его пробелом или полным знаком'],
+    blocks: [
+      {
+        title: 'Горизонтальный знак',
+        body: 'Знак ー занимает место внутри записи катаканой. В этом курсе он рассматривается как письменная часть показанного слова.',
+        examples: [{ japanese: 'コーヒー', reading: 'kōhī', meaning: 'Контролируемая запись со знаком ー.' }],
+      },
+      {
+        title: 'Сохраните порядок',
+        body: 'В слове ケーキ знак ー идёт после ケ. Не отделяйте его пробелом и не переносите в другое место.',
+        examples: [{ japanese: 'ケーキ', reading: 'kēki', meaning: 'Запись со знаком ー внутри.' }],
+      },
+      {
+        title: 'Не путайте со штрихом формы',
+        body: 'Смотрите, является ли черта отдельным знаком между другими формами. В упражнениях это всегда видно по позиции.',
+        examples: [{ japanese: 'パーティー', reading: 'pātī', meaning: 'Запись с двумя знаками ー.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-small-symbols'],
+    introducedItems: ['orthography:ー'],
+    exercisePrefix: 'klong',
+    exerciseDrafts: [
+      { prompt: 'В какой записи есть знак ー?', options: ['ケーキ', 'ケキ', 'ケッキ'], answerIndex: 0, explanation: 'В ケーキ после ケ стоит знак ー.', hint: 'Найдите отдельную горизонтальную черту.' },
+      { prompt: 'Где стоит знак ー в записи ケーキ?', options: ['После ケ', 'Перед ケ', 'После キ'], answerIndex: 0, explanation: 'Порядок записи: ケ・ー・キ.', hint: 'Прочитайте формы слева направо.' },
+      { prompt: 'Какая строка содержит два знака ー?', options: ['パーティー', 'パテイ', 'パッティ'], answerIndex: 0, explanation: 'В パーティー знак ー показан два раза.', hint: 'Посчитайте отдельные горизонтальные знаки.' },
+      { prompt: 'Как следует записывать знак ー внутри показанного слова?', options: ['Без пробела между формами', 'В отдельной строке', 'Перед первым знаком'], answerIndex: 0, explanation: 'Знак ー входит в целую запись слова.', hint: 'Сверьтесь с примером ケーキ.' },
+      { prompt: 'Какая запись сохраняет структуру コ・ー・ヒ・ー?', options: ['コーヒー', 'コヒー', 'コーヒ'], answerIndex: 0, explanation: 'В コーヒー показаны обе позиции знака ー.', hint: 'Проверьте все четыре части.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-similar-forms',
+    moduleId: 'katakana',
+    title: 'Похожие формы катаканы',
+    japaneseTitle: 'シ・ツ / ソ・ン',
+    description: 'Тренируйте зрительное различение форм, которые легко переставить местами.',
+    durationMinutes: 11,
+    skill: 'katakana',
+    objectives: ['различать пары シ・ツ и ソ・ン в показанной строке', 'проверять форму до выбора подписи'],
+    blocks: [
+      {
+        title: 'Смотрите на направление',
+        body: 'Похожие формы не нужно угадывать по общему силуэту. Сравните положение коротких штрихов в паре シ и ツ.',
+        examples: [{ japanese: 'シ / ツ', reading: 'shi / tsu', meaning: 'Пара похожих, но разных форм.' }],
+      },
+      {
+        title: 'Ещё одна пара',
+        body: 'Сравните ソ и ン в одном размере. Проверяйте, куда направлены части каждого знака.',
+        examples: [{ japanese: 'ソ / ン', reading: 'so / n', meaning: 'Вторая пара для зрительной проверки.' }],
+      },
+      {
+        title: 'Найдите форму в слове',
+        body: 'В записи コンテスト сначала найдите К, затем ン и остальные формы. Не определяйте слово по одной букве.',
+        examples: [{ japanese: 'コンテスト', reading: 'kontesuto', meaning: 'Контролируемая строка с ン и ツ.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-long-vowels'],
+    introducedItems: ['katakana:similar-forms'],
+    exercisePrefix: 'ksim',
+    exerciseDrafts: [
+      { prompt: 'Какова письменная подпись знака ツ?', options: ['tsu', 'shi', 'so'], answerIndex: 0, explanation: 'ツ соответствует подписи tsu.', hint: 'Сравните его с シ.' },
+      { prompt: 'Какой знак имеет подпись n?', options: ['ン', 'ソ', 'ツ'], answerIndex: 0, explanation: 'Знак ン имеет отдельную подпись n.', hint: 'Это вторая форма второй пары.' },
+      { prompt: 'Какая запись содержит знак ン?', options: ['コンテスト', 'コソテスト', 'コシテスト'], answerIndex: 0, explanation: 'В コンテスト второй знак — ン.', hint: 'Посмотрите сразу после コ.' },
+      { prompt: 'Какую пару нужно сравнивать по направлению штрихов?', options: ['シ・ツ', 'ア・イ', 'カ・キ'], answerIndex: 0, explanation: 'СИ и ツ похожи по силуэту, но различаются деталями.', hint: 'Вернитесь к первому блоку.' },
+      { prompt: 'Какая подпись у знака ソ?', options: ['so', 'n', 'shi'], answerIndex: 0, explanation: 'ソ записывается как so.', hint: 'Не смешивайте его с ン.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'katakana-loanword-spelling',
+    moduleId: 'katakana',
+    title: 'Контролируемые записи заимствований',
+    japaneseTitle: 'カメラ・ホテル・パーティー',
+    description: 'Закрепите малые формы и знак ー в небольшом закрытом наборе слов.',
+    durationMinutes: 12,
+    skill: 'writing',
+    objectives: ['распознавать показанные записи катаканой целиком', 'сохранять порядок знаков в знакомом слове'],
+    blocks: [
+      {
+        title: 'Небольшой закрытый набор',
+        body: 'В этом уроке используются только показанные записи: カメラ, ホテル, パーティー, ケーキ и コーヒー. Не выводите из них правила для любых новых слов.',
+        examples: [{ japanese: 'カメラ', reading: 'kamera', meaning: 'Камера.' }, { japanese: 'ホテル', reading: 'hoteru', meaning: 'Отель.' }],
+      },
+      {
+        title: 'Структура важнее догадки',
+        body: 'Сначала найдите все формы, включая малые и знак ー. Затем сверяйте готовую запись со словарной карточкой урока.',
+        examples: [{ japanese: 'パーティー', reading: 'pātī', meaning: 'Показанная запись с малой ィ и знаком ー.' }],
+      },
+      {
+        title: 'Письменная граница',
+        body: 'Это упражнение проверяет только фиксированный набор написаний. Оно не оценивает все возможные записи заимствований.',
+        examples: [{ japanese: 'ケーキ', reading: 'kēki', meaning: 'Показанная запись со знаком ー.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-similar-forms'],
+    introducedItems: ['vocabulary:カメラ', 'vocabulary:ホテル', 'vocabulary:パーティー', 'vocabulary:ケーキ'],
+    exercisePrefix: 'kloan',
+    exerciseDrafts: [
+      { prompt: 'Какая показанная запись означает «камера»?', options: ['カメラ', 'ホテル', 'ケーキ'], answerIndex: 0, explanation: 'В закрытом наборе урока «камера» — カメラ.', hint: 'Сверьтесь с первым блоком.' },
+      { prompt: 'Какая запись содержит малую ィ?', options: ['パーティー', 'ホテル', 'カメラ'], answerIndex: 0, explanation: 'В パーティー есть малая ィ.', hint: 'Посмотрите на форму перед последним ー.' },
+      { prompt: 'Какая запись означает «отель»?', options: ['ホテル', 'コーヒー', 'カメラ'], answerIndex: 0, explanation: 'В наборе урока ホテル означает «отель».', hint: 'Это второе слово в первом блоке.' },
+      { prompt: 'Какая запись сохраняет знак ー?', options: ['ケーキ', 'ケキ', 'ケッキ'], answerIndex: 0, explanation: 'В ケーキ знак ー стоит после ケ.', hint: 'Ищите отдельную горизонтальную форму.' },
+      { prompt: 'Что проверяет этот урок?', options: ['Фиксированный набор написаний', 'Любое новое слово', 'Свободный текст'], answerIndex: 0, explanation: 'Урок ограничен явно показанными записями.', hint: 'Вернитесь к границе третьего блока.' },
+    ],
+  }),
+];
+
+const writtenLessons: Lesson[] = [
+  authoredLesson({
+    id: 'writing-layout',
+    moduleId: 'sentences',
+    title: 'Как устроена письменная строка',
+    japaneseTitle: '文字・ことば・文',
+    description: 'Соберите знакомые знаки в слова и короткие строки без лишних пробелов.',
+    durationMinutes: 10,
+    skill: 'orthography',
+    objectives: ['различать знак, слово и короткое предложение', 'оформлять показанную строку знаком 。'],
+    blocks: [
+      {
+        title: 'Знаки образуют запись',
+        body: 'Знаки хираганы и катаканы можно соединять в одну запись слова. Латинская транскрипция остаётся опорой для проверки порядка, а не заменяет японскую строку.',
+        examples: [{ japanese: 'カメラ', reading: 'kamera', meaning: 'Одно слово из четырёх знаков.' }],
+      },
+      {
+        title: 'Слово и предложение',
+        body: 'В коротком примере слова пишутся подряд, а знак 。 завершает предложение. Пробелы в разборе нужны только для наглядности.',
+        examples: [{ japanese: 'これはほんです。', reading: 'kore wa hon desu.', meaning: 'Целая письменная строка.' }],
+      },
+      {
+        title: 'Контролируемая граница',
+        body: 'Этот курс проверяет только показанные слова и модели. Строка с незнакомыми знаками не считается доказательством общего чтения.',
+        examples: [{ japanese: 'わたしはミキです。', reading: 'watashi wa Miki desu.', meaning: 'Контролируемая строка с двумя системами письма.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['katakana-words'],
+    introducedItems: ['orthography:word-boundary', 'orthography:sentence-boundary'],
+    exercisePrefix: 'layout',
+    exerciseDrafts: [
+      { prompt: 'Что завершает показанную письменную строку?', options: ['Знак 。', 'Пробел внутри слова', 'Латинская буква'], answerIndex: 0, explanation: 'Знак 。 ставится в конце показанного предложения.', hint: 'Сверьтесь со вторым блоком.' },
+      { prompt: 'Какая запись сохраняет слово カメラ целиком?', options: ['カメラ', 'カ メ ラ', 'カメ ラ。'], answerIndex: 0, explanation: 'Знаки одного слова не разделяются пробелами.', hint: 'Проверьте первый пример.' },
+      { prompt: 'Какая строка оформлена как предложение?', options: ['これはほんです。', 'これ は ほん です', '。これはほんです'], answerIndex: 0, explanation: 'В показанном предложении 。 стоит в конце.', hint: 'Ищите завершающий знак.' },
+      { prompt: 'Для чего в уроке дана латинская транскрипция?', options: ['Проверить порядок знаков', 'Заменить японскую строку', 'Оценить свободный текст'], answerIndex: 0, explanation: 'Транскрипция — только письменная опора для проверки.', hint: 'Вернитесь к первому блоку.' },
+      { prompt: 'Что ограничивает этот курс на данном шаге?', options: ['Показанные слова и модели', 'Любые японские тексты', 'Только латиница'], answerIndex: 0, explanation: 'Проверяются только явно показанные записи.', hint: 'Прочитайте границу третьего блока.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'copula-questions',
+    moduleId: 'sentences',
+    title: 'Вопрос с ですか',
+    japaneseTitle: 'X は Y ですか',
+    description: 'Добавьте знак か в конец знакомой письменной модели.',
+    durationMinutes: 11,
+    skill: 'grammar',
+    objectives: ['находить か в конце показанного вопроса', 'отличать утверждение от вопроса в контролируемой паре'],
+    blocks: [
+      {
+        title: 'Новая концовка',
+        body: 'В контролируемой модели X は Y ですか знак か добавляется после です. Он отмечает вопросительную форму показанной строки.',
+        examples: [{ japanese: 'これはほんですか。', reading: 'kore wa hon desu ka.', meaning: 'Контролируемый вопрос о книге.' }],
+      },
+      {
+        title: 'Сравните две строки',
+        body: 'Утверждение これはほんです。 и вопрос これはほんですか。 отличаются последней частью. Все предыдущие части остаются на месте.',
+        examples: [{ japanese: 'これはほんです。 / これはほんですか。', reading: 'kore wa hon desu. / kore wa hon desu ka.', meaning: 'Пара с разной концовкой.' }],
+      },
+      {
+        title: 'Не расширяйте правило',
+        body: 'На этом шаге рассматривается только форма ですか после показанной модели. Другие вопросительные конструкции не оцениваются.',
+        examples: [{ japanese: 'これはペンですか。', reading: 'kore wa pen desu ka.', meaning: 'Ещё один пример той же модели.' }],
+      },
+    ],
+    sourceIds: grammarSourceIds,
+    prerequisiteLessonIds: ['topic-wa'],
+    introducedItems: ['grammar:XはYですか'],
+    exercisePrefix: 'cq',
+    exerciseDrafts: [
+      { prompt: 'Какая часть добавлена к утверждению, чтобы получить показанный вопрос?', options: ['か', 'は', 'これ'], answerIndex: 0, explanation: 'В конце модели добавляется か.', hint: 'Сравните последние части двух строк.' },
+      { prompt: 'Какая строка является показанным вопросом?', options: ['これはほんですか。', 'これはほんです。', 'これほんはですか。'], answerIndex: 0, explanation: 'Вопрос сохраняет порядок X は Y です и добавляет か.', hint: 'Ищите か после です.' },
+      { prompt: 'Где стоит か в модели урока?', options: ['После です', 'Перед X', 'Внутри Y'], answerIndex: 0, explanation: 'Модель заканчивается частью ですか.', hint: 'Смотрите на концовку.' },
+      { prompt: 'Чем отличаются две показанные строки?', options: ['Последней частью', 'Первым знаком', 'Системой письма'], answerIndex: 0, explanation: 'Вторая строка добавляет か после です.', hint: 'Сверьте пары посимвольно.' },
+      { prompt: 'Что не оценивает этот шаг?', options: ['Другие вопросительные конструкции', 'Порядок X は Y ですか', 'Наличие か после です'], answerIndex: 0, explanation: 'Курс ограничивает проверку одной явно показанной моделью.', hint: 'Вернитесь к границе третьего блока.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'also-and-possession',
+    moduleId: 'sentences',
+    title: 'Связки も и の',
+    japaneseTitle: 'X も Y / X の Y',
+    description: 'Разберите две короткие связки внутри заранее показанных моделей.',
+    durationMinutes: 11,
+    skill: 'grammar',
+    objectives: ['находить も и の в контролируемой строке', 'выбирать правильный порядок частей в двух моделях'],
+    blocks: [
+      {
+        title: 'Связка も',
+        body: 'В показанной модели X も Y です знак も ставится после X. В этом курсе он вводится как часть готовой письменной структуры.',
+        examples: [{ japanese: 'これもほんです。', reading: 'kore mo hon desu.', meaning: 'Контролируемая строка с も.' }],
+      },
+      {
+        title: 'Связка の',
+        body: 'В модели X の Y знак の связывает две показанные части. Сначала найдите X, затем の и Y.',
+        examples: [{ japanese: 'わたしのほん', reading: 'watashi no hon', meaning: 'Контролируемая запись с の.' }],
+      },
+      {
+        title: 'Две разные модели',
+        body: 'Не меняйте も и の местами: они показаны в разных структурах. Упражнения проверяют только порядок частей в этих примерах.',
+        examples: [{ japanese: 'これも / わたしの', reading: 'kore mo / watashi no', meaning: 'Две разные письменные связки.' }],
+      },
+    ],
+    sourceIds: grammarSourceIds,
+    prerequisiteLessonIds: ['copula-questions'],
+    introducedItems: ['grammar:も', 'grammar:の'],
+    exercisePrefix: 'ap',
+    exerciseDrafts: [
+      { prompt: 'Какой знак стоит после X в модели X も Y です?', options: ['も', 'の', 'か'], answerIndex: 0, explanation: 'В этой модели も следует за X.', hint: 'Сверьтесь с первым примером.' },
+      { prompt: 'Какая запись соответствует модели X の Y?', options: ['わたしのほん', 'わたしほんの', 'のわたしほん'], answerIndex: 0, explanation: 'Порядок модели: X, затем の, затем Y.', hint: 'Найдите знак の посередине.' },
+      { prompt: 'Какая строка содержит も?', options: ['これもほんです。', 'わたしのほん', 'これはほんですか。'], answerIndex: 0, explanation: 'В первой строке после これ стоит も.', hint: 'Ищите сам знак も.' },
+      { prompt: 'Можно ли менять も и の местами в моделях урока?', options: ['Нет, это разные структуры', 'Да, всегда', 'Только в латинице'], answerIndex: 0, explanation: 'Урок показывает も и の в разных фиксированных моделях.', hint: 'Прочитайте третий блок.' },
+      { prompt: 'Что является Y в записи わたしのほん?', options: ['ほん', 'わたし', 'の'], answerIndex: 0, explanation: 'После связки の в модели стоит Y — ほん.', hint: 'Смотрите на последнюю часть.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'demonstratives',
+    moduleId: 'sentences',
+    title: 'Указательные слова в модели',
+    japaneseTitle: 'これ・それ・あれ',
+    description: 'Сравните фиксированный набор указательных слов и их место в короткой строке.',
+    durationMinutes: 11,
+    skill: 'grammar',
+    objectives: ['распознавать これ、それ、あれ в показанном наборе', 'собирать короткую модель с указательным словом'],
+    blocks: [
+      {
+        title: 'Три показанные формы',
+        body: 'На этом шаге используются только これ、それ и あれ. Каждое слово может занимать место X перед は в знакомой модели.',
+        examples: [{ japanese: 'それはペンです。', reading: 'sore wa pen desu.', meaning: 'Контролируемая строка с それ.' }],
+      },
+      {
+        title: 'Формы перед существительным',
+        body: 'В закрытом наборе также показаны この、その и あの перед словом. Сравнивайте форму целиком, не переставляя знаки.',
+        examples: [{ japanese: 'このほん', reading: 'kono hon', meaning: 'Контролируемая группа с この.' }],
+      },
+      {
+        title: 'Граница набора',
+        body: 'Урок не объясняет все указательные слова японского. Он проверяет только шесть явно показанных форм и их порядок.',
+        examples: [{ japanese: 'あのカメラ', reading: 'ano kamera', meaning: 'Ещё одна фиксированная группа.' }],
+      },
+    ],
+    sourceIds: grammarSourceIds,
+    prerequisiteLessonIds: ['also-and-possession'],
+    introducedItems: ['vocabulary:これ', 'vocabulary:それ', 'vocabulary:あれ', 'vocabulary:この', 'vocabulary:その', 'vocabulary:あの'],
+    exercisePrefix: 'demo',
+    exerciseDrafts: [
+      { prompt: 'Какое слово занимает место X в записи それはペンです。?', options: ['それ', 'ペン', 'です'], answerIndex: 0, explanation: 'Перед は в этой модели стоит それ.', hint: 'Найдите часть до は.' },
+      { prompt: 'Какая группа соответствует この + ほん?', options: ['このほん', 'ほんこの', 'これほん'], answerIndex: 0, explanation: 'В показанной группе この стоит перед ほん.', hint: 'Сохраните порядок двух частей.' },
+      { prompt: 'Какая строка использует одну из трёх форм これ・それ・あれ?', options: ['あれはカメラです。', 'あのはカメラです。', 'カメラあれです。'], answerIndex: 0, explanation: 'あれ может занимать место X перед は.', hint: 'Сверьтесь с первым блоком.' },
+      { prompt: 'Какая форма показана перед существительным?', options: ['その', 'それ', 'も'], answerIndex: 0, explanation: 'В закрытом наборе その стоит перед словом.', hint: 'Посмотрите на второй блок.' },
+      { prompt: 'Сколько форм проверяет этот урок?', options: ['Шесть явно показанных', 'Все японские', 'Только одну'], answerIndex: 0, explanation: 'Урок ограничен шестью формами из примеров.', hint: 'Прочитайте границу третьего блока.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'numbers-and-symbols',
+    moduleId: 'sentences',
+    title: 'Числа и записи-ярлыки',
+    japaneseTitle: 'いち・に・さん / 1・2・3',
+    description: 'Сопоставьте небольшой набор числовых слов с арабскими цифрами в контролируемых ярлыках.',
+    durationMinutes: 11,
+    skill: 'reading',
+    objectives: ['узнавать いち、に、さん、よん、ご в показанном наборе', 'сопоставлять знакомую запись с цифрой'],
+    blocks: [
+      {
+        title: 'Пять показанных числовых слов',
+        body: 'В этом уроке используются только いち、に、さん、よん и ご рядом с цифрами 1–5. Это ограниченный набор письменных ярлыков.',
+        examples: [{ japanese: 'いち — 1', reading: 'ichi — 1', meaning: 'Первая пара набора.' }],
+      },
+      {
+        title: 'Порядок на ярлыке',
+        body: 'Цифры можно записывать рядом с японским словом в пояснении, но внутри показанной японской записи не заменяйте знаки латиницей.',
+        examples: [{ japanese: 'さん — 3', reading: 'san — 3', meaning: 'Третья пара набора.' }],
+      },
+      {
+        title: 'Не расширяйте счёт',
+        body: 'Урок не проверяет большие числа, даты или все способы счёта. Он ограничен пятью формами, перечисленными выше.',
+        examples: [{ japanese: 'ご — 5', reading: 'go — 5', meaning: 'Пятая пара набора.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['demonstratives'],
+    introducedItems: ['vocabulary:いち', 'vocabulary:に', 'vocabulary:さん', 'vocabulary:よん', 'vocabulary:ご'],
+    exercisePrefix: 'num',
+    exerciseDrafts: [
+      { prompt: 'Какая цифра соответствует записи さん?', options: ['3', '2', '5'], answerIndex: 0, explanation: 'В показанном наборе さん соответствует цифре 3.', hint: 'Сверьтесь со вторым примером.' },
+      { prompt: 'Какая запись соответствует цифре 4?', options: ['よん', 'ご', 'に'], answerIndex: 0, explanation: 'В этом закрытом наборе цифре 4 соответствует よん.', hint: 'Перечислите пары по порядку.' },
+      { prompt: 'Какая пара показана верно?', options: ['いち — 1', 'に — 5', 'ご — 3'], answerIndex: 0, explanation: 'いち сопоставлена с цифрой 1.', hint: 'Посмотрите на первую пару.' },
+      { prompt: 'Сколько числовых форм проверяет урок?', options: ['Пять', 'Десять', 'Все возможные'], answerIndex: 0, explanation: 'Урок ограничен пятью перечисленными формами.', hint: 'Прочитайте третий блок.' },
+      { prompt: 'Что не следует заменять внутри японской записи?', options: ['Знаки латиницей', 'Цифру в пояснении', 'Порядок в таблице'], answerIndex: 0, explanation: 'Японская запись сохраняется как показанная строка.', hint: 'Вернитесь ко второму блоку.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'place-and-existence',
+    moduleId: 'sentences',
+    title: 'Место и наличие в строке',
+    japaneseTitle: 'ここにあります',
+    description: 'Разберите два готовых шаблона с местом и наличием.',
+    durationMinutes: 12,
+    skill: 'grammar',
+    objectives: ['находить место перед に в показанной модели', 'различать あります и います как две готовые формы'],
+    blocks: [
+      {
+        title: 'Место перед に',
+        body: 'В контролируемой модели ここに X があります сначала показано место, затем に, предмет и готовая концовка. Сохраняйте этот порядок.',
+        examples: [{ japanese: 'ここにほんがあります。', reading: 'koko ni hon ga arimasu.', meaning: 'Показанная модель с предметом.' }],
+      },
+      {
+        title: 'Две готовые концовки',
+        body: 'На этом шаге あります и います вводятся как две отдельные письменные формы. Урок не выводит из них все правила выбора формы.',
+        examples: [{ japanese: 'ここにネコがいます。', reading: 'koko ni neko ga imasu.', meaning: 'Показанная модель со второй концовкой.' }],
+      },
+      {
+        title: 'Контролируемый набор',
+        body: 'Упражнения проверяют только места ここ、そこ、あそこ и две показанные концовки. Другие модели места не оцениваются.',
+        examples: [{ japanese: 'あそこにカメラがあります。', reading: 'asoko ni kamera ga arimasu.', meaning: 'Ещё один контролируемый пример.' }],
+      },
+    ],
+    sourceIds: grammarSourceIds,
+    prerequisiteLessonIds: ['numbers-and-symbols'],
+    introducedItems: ['vocabulary:ここ', 'vocabulary:そこ', 'vocabulary:あそこ', 'grammar:にあります', 'grammar:にいます'],
+    exercisePrefix: 'place',
+    exerciseDrafts: [
+      { prompt: 'Какая часть стоит перед に в записи ここにほんがあります。?', options: ['ここ', 'ほん', 'あります'], answerIndex: 0, explanation: 'Перед に показано место ここ.', hint: 'Найдите часть слева от に.' },
+      { prompt: 'Какая концовка показана в строке с ネコ?', options: ['います', 'あります', 'ですか'], answerIndex: 0, explanation: 'В показанном примере с ネコ используется います.', hint: 'Смотрите на конец второй строки.' },
+      { prompt: 'Какая строка сохраняет модель ここに X があります?', options: ['ここにカメラがあります。', 'ここカメラにあります。', 'カメラここにあります。'], answerIndex: 0, explanation: 'Порядок модели: место, に, X, あります.', hint: 'Сверьтесь с первым блоком.' },
+      { prompt: 'Какие места проверяет этот урок?', options: ['ここ、そこ、あそこ', 'Все места', 'Только ここ'], answerIndex: 0, explanation: 'Урок ограничен тремя явно показанными формами.', hint: 'Прочитайте третий блок.' },
+      { prompt: 'Что вводится как готовые письменные формы?', options: ['あります и います', 'Все глаголы', 'Любой текст'], answerIndex: 0, explanation: 'На этом шаге разбираются только две концовки.', hint: 'Вернитесь ко второму блоку.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'verb-forms',
+    moduleId: 'sentences',
+    title: 'Готовые формы действий',
+    japaneseTitle: 'よみます・かきます',
+    description: 'Используйте небольшой закрытый набор форм действий в письменной строке.',
+    durationMinutes: 12,
+    skill: 'grammar',
+    objectives: ['узнавать четыре показанные формы действий', 'собирать строку X を V ます в заданном порядке'],
+    blocks: [
+      {
+        title: 'Четыре формы',
+        body: 'В этом уроке используются только よみます、かきます、みます и いきます. Каждая форма дана как готовая письменная единица.',
+        examples: [{ japanese: 'ほんをよみます。', reading: 'hon o yomimasu.', meaning: 'Контролируемая строка с よみます.' }],
+      },
+      {
+        title: 'Показанная рамка',
+        body: 'В модели X を V ます сначала стоит X, затем を и готовая форма действия. Пробелы в разборе не входят в обычную строку.',
+        examples: [{ japanese: 'てがみをかきます。', reading: 'tegami o kakimasu.', meaning: 'Контролируемая строка с かきます.' }],
+      },
+      {
+        title: 'Граница формы',
+        body: 'Урок не выводит другие времена, отрицания или все глагольные правила. Проверяется только четыре показанные формы и порядок модели.',
+        examples: [{ japanese: 'えをみます。', reading: 'e o mimasu.', meaning: 'Ещё одна строка из закрытого набора.' }],
+      },
+    ],
+    sourceIds: grammarSourceIds,
+    prerequisiteLessonIds: ['place-and-existence'],
+    introducedItems: ['vocabulary:よみます', 'vocabulary:かきます', 'vocabulary:みます', 'vocabulary:いきます', 'grammar:XをVます'],
+    exercisePrefix: 'verb',
+    exerciseDrafts: [
+      { prompt: 'Какая форма показана в строке ほんをよみます。?', options: ['よみます', 'かきます', 'いきます'], answerIndex: 0, explanation: 'В конце строки стоит готовая форма よみます.', hint: 'Смотрите после を.' },
+      { prompt: 'Какая строка соответствует модели X を V ます?', options: ['てがみをかきます。', 'てがみかきますを。', 'をてがみかきます。'], answerIndex: 0, explanation: 'Порядок модели: X, を, затем V ます.', hint: 'Сверьтесь со вторым блоком.' },
+      { prompt: 'Какой знак стоит между X и V ます в модели урока?', options: ['を', 'は', 'の'], answerIndex: 0, explanation: 'В показанной модели X соединяется с формой через を.', hint: 'Посмотрите на рамку во втором блоке.' },
+      { prompt: 'Сколько форм действий проверяет этот урок?', options: ['Четыре', 'Все возможные', 'Одна'], answerIndex: 0, explanation: 'Урок ограничен четырьмя перечисленными формами.', hint: 'Вернитесь к первому блоку.' },
+      { prompt: 'Что не выводит этот урок?', options: ['Другие времена и отрицания', 'Порядок X を V ます', 'Написание よみます'], answerIndex: 0, explanation: 'Проверка ограничена готовыми показанными формами.', hint: 'Прочитайте границу третьего блока.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'adjectives',
+    moduleId: 'sentences',
+    title: 'Четыре описательные записи',
+    japaneseTitle: 'おおきい・ちいさい',
+    description: 'Используйте небольшой закрытый набор описательных слов в знакомой модели.',
+    durationMinutes: 11,
+    skill: 'grammar',
+    objectives: ['узнавать четыре показанные описательные записи', 'располагать описание перед существительным в фиксированной группе'],
+    blocks: [
+      {
+        title: 'Закрытый набор описаний',
+        body: 'В этом уроке используются только おおきい、ちいさい、あたらしい и たかい. Каждая запись дана вместе с показанным существительным.',
+        examples: [{ japanese: 'おおきいカメラ', reading: 'ōkii kamera', meaning: 'Большая камера.' }],
+      },
+      {
+        title: 'Описание перед словом',
+        body: 'В группе おおきいカメラ сначала стоит описание, затем существительное. В обычной записи между ними нет обязательного пробела.',
+        examples: [{ japanese: 'ちいさいほん', reading: 'chiisai hon', meaning: 'Маленькая книга.' }],
+      },
+      {
+        title: 'Граница этого урока',
+        body: 'Здесь не оцениваются все описательные слова и их изменения. Проверяется только закрытый набор из четырёх записей.',
+        examples: [{ japanese: 'あたらしいペン', reading: 'atarashii pen', meaning: 'Новая ручка.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['verb-forms'],
+    introducedItems: ['vocabulary:おおきい', 'vocabulary:ちいさい', 'vocabulary:あたらしい', 'vocabulary:たかい'],
+    exercisePrefix: 'adj',
+    exerciseDrafts: [
+      { prompt: 'Какая запись стоит перед カメラ в показанной группе?', options: ['おおきい', 'ちいさい', 'ペン'], answerIndex: 0, explanation: 'В примере группа начинается с おおきい.', hint: 'Сверьтесь с первым примером.' },
+      { prompt: 'Какая группа сохраняет порядок «описание, затем существительное»?', options: ['ちいさいほん', 'ほんちいさい', 'ちいさい。ほん'], answerIndex: 0, explanation: 'В показанной группе описание идёт перед словом ほん.', hint: 'Посмотрите на второй блок.' },
+      { prompt: 'Какая запись входит в закрытый набор урока?', options: ['あたらしい', 'すばらしい', 'ながい'], answerIndex: 0, explanation: 'あたらしい перечислена среди четырёх форм урока.', hint: 'Проверьте первый блок.' },
+      { prompt: 'Какая группа показана как «новая ручка»?', options: ['あたらしいペン', 'ペンあたらしい', 'あたらしいカメラ'], answerIndex: 0, explanation: 'В примере новое описание стоит перед ペン.', hint: 'Сверьтесь с третьим блоком.' },
+      { prompt: 'Что не оценивает этот урок?', options: ['Все описательные слова', 'Четыре показанные записи', 'Порядок показанной группы'], answerIndex: 0, explanation: 'Проверка ограничена небольшим закрытым набором.', hint: 'Прочитайте границу третьего блока.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'controlled-kanji',
+    moduleId: 'sentences',
+    title: 'Двенадцать кандзи на ярлыках',
+    japaneseTitle: '一二三四五 日月火水木金土',
+    description: 'Узнайте ограниченный набор кандзи в числовых и календарных ярлыках.',
+    durationMinutes: 12,
+    skill: 'kanji',
+    objectives: ['узнавать двенадцать явно перечисленных кандзи', 'находить их в показанном ярлыке без вывода новых чтений'],
+    blocks: [
+      {
+        title: 'Числовые формы',
+        body: 'На этом шаге показаны только 一、二、三、四 и 五. Сопоставляйте их с арабскими цифрами в таблице урока.',
+        examples: [{ japanese: '一・二・三・四・五', reading: '1 / 2 / 3 / 4 / 5', meaning: 'Пять контролируемых числовых ярлыков.' }],
+      },
+      {
+        title: 'Ярлыки дней',
+        body: 'Также показаны 日、月、火、水、木、金 и 土 как ограниченный набор календарных ярлыков. Не выводите из него общий словарь кандзи.',
+        examples: [{ japanese: '月・火・水', reading: 'calendar labels', meaning: 'Три ярлыка из закрытого набора.' }],
+      },
+      {
+        title: 'Честная граница',
+        body: 'Двенадцать форм не означают освоение письма кандзи. Урок проверяет только узнавание перечисленных знаков в показанных контекстах.',
+        examples: [{ japanese: '金・土', reading: 'calendar labels', meaning: 'Ещё два ярлыка из набора.' }],
+      },
+    ],
+    sourceIds: originalSourceIds,
+    prerequisiteLessonIds: ['adjectives'],
+    introducedItems: ['kanji:一', 'kanji:二', 'kanji:三', 'kanji:四', 'kanji:五', 'kanji:日', 'kanji:月', 'kanji:火', 'kanji:水', 'kanji:木', 'kanji:金', 'kanji:土'],
+    exercisePrefix: 'kanji',
+    exerciseDrafts: [
+      { prompt: 'Какой кандзи соответствует цифре 3 в таблице урока?', options: ['三', '二', '五'], answerIndex: 0, explanation: 'В ограниченном наборе 三 сопоставлен с цифрой 3.', hint: 'Сверьтесь с первой строкой знаков.' },
+      { prompt: 'Какая форма входит в календарные ярлыки урока?', options: ['水', '本', '人'], answerIndex: 0, explanation: '水 перечислен среди семи календарных ярлыков.', hint: 'Посмотрите на второй блок.' },
+      { prompt: 'Сколько числовых кандзи перечислено в уроке?', options: ['Пять', 'Двенадцать', 'Семь'], answerIndex: 0, explanation: 'Числовая часть набора содержит 一〜五.', hint: 'Посчитайте формы в первом блоке.' },
+      { prompt: 'Какой знак показан рядом с 月 и 火?', options: ['水', '四', '二'], answerIndex: 0, explanation: 'В примере календарных ярлыков показаны 月・火・水.', hint: 'Сверьтесь со вторым блоком.' },
+      { prompt: 'Что доказывает успешная попытка в этом уроке?', options: ['Узнавание двенадцати показанных знаков', 'Освоение всех кандзи', 'Свободное письмо'], answerIndex: 0, explanation: 'Урок прямо ограничен двенадцатью формами.', hint: 'Прочитайте честную границу.' },
+    ],
+  }),
+  authoredLesson({
+    id: 'controlled-reading',
+    moduleId: 'sentences',
+    title: 'Короткая контролируемая запись',
+    japaneseTitle: 'わたしはミキです。',
+    description: 'Прочитайте короткий текст, собранный только из уже показанных форм и моделей.',
+    durationMinutes: 13,
+    skill: 'reading',
+    objectives: ['находить знакомые части в коротком тексте', 'сопоставлять фиксированную строку с её разбором'],
+    blocks: [
+      {
+        title: 'Текст целиком',
+        body: 'Читайте строку как несколько знакомых моделей. Все новые для этого курса элементы явно перечислены ниже; ничего не нужно угадывать за пределами набора.',
+        examples: [{ japanese: 'わたしはミキです。ほんをよみます。', reading: 'watashi wa Miki desu. hon o yomimasu.', meaning: 'Представление и одна показанная форма действия.' }],
+      },
+      {
+        title: 'Разбор частей',
+        body: 'В первой строке найдите わたしは、ミキ и です. Во второй — ほん、を и よみます. Знак 。 завершает каждое предложение.',
+        examples: [{ japanese: 'わたしは ミキ です。 / ほん を よみます。', reading: 'controlled breakdown', meaning: 'Пробелы показаны только для разбора.' }],
+      },
+      {
+        title: 'Граница чтения',
+        body: 'Этот текст не подтверждает чтение произвольных японских материалов. Проверяется только закрытый набор знаков, слов и моделей этой программы.',
+        examples: [{ japanese: 'このほんはおおきいです。', reading: 'kono hon wa ōkii desu.', meaning: 'Ещё одна контролируемая строка.' }],
+      },
+    ],
+    sourceIds: grammarSourceIds,
+    prerequisiteLessonIds: ['controlled-kanji'],
+    introducedItems: ['reading:controlled-text-1'],
+    exercisePrefix: 'reading',
+    exerciseDrafts: [
+      { prompt: 'Какое имя указано в первой строке текста?', options: ['ミキ', 'ほん', 'わたし'], answerIndex: 0, explanation: 'Между わたしは и です стоит ミキ.', hint: 'Смотрите на первую строку.' },
+      { prompt: 'Какая форма действия стоит во второй строке?', options: ['よみます', 'かきます', 'いきます'], answerIndex: 0, explanation: 'Текст заканчивается формой よみます.', hint: 'Найдите часть после を.' },
+      { prompt: 'Сколько предложений в главном примере?', options: ['Два', 'Одно', 'Три'], answerIndex: 0, explanation: 'Главный пример содержит два знака 。.', hint: 'Посчитайте завершающие знаки.' },
+      { prompt: 'Какая часть стоит перед は в записи このほんはおおきいです。?', options: ['このほん', 'おおきい', 'です'], answerIndex: 0, explanation: 'Перед は стоит группа このほん.', hint: 'Смотрите на часть слева от は.' },
+      { prompt: 'Что проверяет этот текст?', options: ['Закрытый набор программы', 'Произвольные материалы', 'Непоказанные модели'], answerIndex: 0, explanation: 'Урок ограничивает проверку показанными формами.', hint: 'Прочитайте границу третьего блока.' },
+    ],
+  }),
+];
+
+export const lessons: Lesson[] = [
+  annotatedLegacyLesson('hiragana-vowels', [], ['hiragana:あ-お']),
+  annotatedLegacyLesson('hiragana-k', ['hiragana-vowels'], ['hiragana:か-こ']),
+  ...hiraganaLessons,
+  annotatedLegacyLesson('first-words', ['hiragana-long-vowels-punctuation'], ['vocabulary:いえ', 'vocabulary:あか', 'vocabulary:かお', 'vocabulary:ここ', 'vocabulary:うえ']),
+  annotatedLegacyLesson('katakana-vowels', ['first-words'], ['katakana:ア-オ']),
+  ...katakanaLessons,
+  annotatedLegacyLesson('katakana-words', ['katakana-loanword-spelling'], ['vocabulary:アイス', 'vocabulary:エコ', 'vocabulary:ココア', 'vocabulary:コーヒー']),
+  writtenLessons[0],
+  annotatedLegacyLesson('topic-wa', ['writing-layout'], ['grammar:XはYです']),
+  ...writtenLessons.slice(1),
+  annotatedLegacyLesson('self-introduction', ['controlled-reading'], ['writing:self-introduction-template']),
+];
+
+const legacyFlashcards: Flashcard[] = [
   {
     id: 'card-h-a',
     front: 'あ',
@@ -993,6 +2441,113 @@ export const flashcards: Flashcard[] = [
   { id: 'card-word-koko', front: 'ここ', back: 'Здесь', reading: 'koko', kind: 'word' },
   { id: 'card-word-kokoa', front: 'ココア', back: 'Какао', reading: 'kokoa', kind: 'word' },
   { id: 'card-word-aisu', front: 'アイス', back: 'Мороженое', reading: 'aisu', kind: 'word' },
+];
+
+const legacyFlashcardLessonIds: Record<string, string> = {
+  'card-h-a': 'hiragana-vowels',
+  'card-h-i': 'hiragana-vowels',
+  'card-h-u': 'hiragana-vowels',
+  'card-h-e': 'hiragana-vowels',
+  'card-h-o': 'hiragana-vowels',
+  'card-h-ka': 'hiragana-k',
+  'card-h-ki': 'hiragana-k',
+  'card-h-ku': 'hiragana-k',
+  'card-h-ke': 'hiragana-k',
+  'card-h-ko': 'hiragana-k',
+  'card-k-a': 'katakana-vowels',
+  'card-k-i': 'katakana-vowels',
+  'card-k-u': 'katakana-vowels',
+  'card-k-e': 'katakana-vowels',
+  'card-k-o': 'katakana-vowels',
+  'card-k-ko': 'katakana-words',
+  'card-k-su': 'katakana-words',
+  'card-k-hi': 'katakana-words',
+  'card-word-ie': 'first-words',
+  'card-word-aka': 'first-words',
+  'card-word-kao': 'first-words',
+  'card-word-koko': 'first-words',
+  'card-word-kokoa': 'katakana-words',
+  'card-word-aisu': 'katakana-words',
+};
+
+const kanaCardLessonIds: Record<string, Record<'hiragana' | 'katakana', string>> = {
+  'base-vowels': { hiragana: 'hiragana-vowels', katakana: 'katakana-vowels' },
+  'base-k': { hiragana: 'hiragana-k', katakana: 'katakana-k-s' },
+  'base-s': { hiragana: 'hiragana-s', katakana: 'katakana-k-s' },
+  'base-t': { hiragana: 'hiragana-t', katakana: 'katakana-t-n' },
+  'base-n': { hiragana: 'hiragana-n', katakana: 'katakana-t-n' },
+  'base-h': { hiragana: 'hiragana-h', katakana: 'katakana-h-m' },
+  'base-m': { hiragana: 'hiragana-m', katakana: 'katakana-h-m' },
+  'base-y': { hiragana: 'hiragana-y-r', katakana: 'katakana-y-r-w-n' },
+  'base-r': { hiragana: 'hiragana-y-r', katakana: 'katakana-y-r-w-n' },
+  'base-w-n': { hiragana: 'hiragana-w-n', katakana: 'katakana-y-r-w-n' },
+  'diacritic-g': { hiragana: 'hiragana-diacritics', katakana: 'katakana-diacritics' },
+  'diacritic-z': { hiragana: 'hiragana-diacritics', katakana: 'katakana-diacritics' },
+  'diacritic-d': { hiragana: 'hiragana-diacritics', katakana: 'katakana-diacritics' },
+  'diacritic-b': { hiragana: 'hiragana-diacritics', katakana: 'katakana-diacritics' },
+  'diacritic-p': { hiragana: 'hiragana-diacritics', katakana: 'katakana-diacritics' },
+  'combo-kya': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-gya': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-sha': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-ja': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-cha': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-nya': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-hya': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-bya': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-pya': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-mya': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'combo-rya': { hiragana: 'hiragana-combinations', katakana: 'katakana-combinations' },
+  'small-vowels': {
+    hiragana: 'hiragana-long-vowels-punctuation',
+    katakana: 'katakana-small-symbols',
+  },
+  'small-tsu': { hiragana: 'hiragana-small-tsu', katakana: 'katakana-small-symbols' },
+  'long-vowel-mark': {
+    hiragana: 'hiragana-long-vowels-punctuation',
+    katakana: 'katakana-long-vowels',
+  },
+};
+
+const existingKanaCards = new Set(legacyFlashcards.map((card) => `${card.kind}:${card.front}`));
+
+const kanaFlashcards: Flashcard[] = kanaRows.flatMap((row) =>
+  (['hiragana', 'katakana'] as const).flatMap((kind) =>
+    row[kind].map((front, index) => ({
+      id: `card-${kind === 'hiragana' ? 'h' : 'k'}-${row.id}-${index + 1}`,
+      front,
+      back: `Письменная транскрипция: ${row.romanization[index]}.`,
+      reading: row.romanization[index],
+      kind,
+      lessonId: kanaCardLessonIds[row.id]?.[kind] ?? row.lessonId,
+    })),
+  ),
+).filter((card) => !existingKanaCards.has(`${card.kind}:${card.front}`));
+
+const expandedWordFlashcards: Flashcard[] = [
+  { id: 'card-word-pen', front: 'ペン', back: 'Ручка', reading: 'pen', kind: 'word', lessonId: 'demonstratives' },
+  { id: 'card-word-camera', front: 'カメラ', back: 'Камера', reading: 'kamera', kind: 'word', lessonId: 'katakana-loanword-spelling' },
+  { id: 'card-word-hotel', front: 'ホテル', back: 'Отель', reading: 'hoteru', kind: 'word', lessonId: 'katakana-loanword-spelling' },
+  { id: 'card-word-cake', front: 'ケーキ', back: 'Кекс', reading: 'kēki', kind: 'word', lessonId: 'katakana-loanword-spelling' },
+  { id: 'card-word-party', front: 'パーティー', back: 'Вечеринка', reading: 'pātī', kind: 'word', lessonId: 'katakana-loanword-spelling' },
+  { id: 'card-word-book', front: 'ほん', back: 'Книга', reading: 'hon', kind: 'word', lessonId: 'topic-wa' },
+  { id: 'card-word-letter', front: 'てがみ', back: 'Письмо', reading: 'tegami', kind: 'word', lessonId: 'verb-forms' },
+  { id: 'card-word-cat', front: 'ネコ', back: 'Кошка', reading: 'neko', kind: 'word', lessonId: 'place-and-existence' },
+  { id: 'card-word-big', front: 'おおきい', back: 'Большой', reading: 'ōkii', kind: 'word', lessonId: 'adjectives' },
+  { id: 'card-word-small', front: 'ちいさい', back: 'Маленький', reading: 'chiisai', kind: 'word', lessonId: 'adjectives' },
+  { id: 'card-word-new', front: 'あたらしい', back: 'Новый', reading: 'atarashii', kind: 'word', lessonId: 'adjectives' },
+  { id: 'card-word-high', front: 'たかい', back: 'Высокий; дорогой', reading: 'takai', kind: 'word', lessonId: 'adjectives' },
+  { id: 'card-word-read', front: 'よみます', back: 'Читает', reading: 'yomimasu', kind: 'word', lessonId: 'verb-forms' },
+  { id: 'card-word-write', front: 'かきます', back: 'Пишет', reading: 'kakimasu', kind: 'word', lessonId: 'verb-forms' },
+  { id: 'card-word-see', front: 'みます', back: 'Смотрит', reading: 'mimasu', kind: 'word', lessonId: 'verb-forms' },
+  { id: 'card-word-go', front: 'いきます', back: 'Идёт', reading: 'ikimasu', kind: 'word', lessonId: 'verb-forms' },
+  { id: 'card-word-this', front: 'これ', back: 'Это', reading: 'kore', kind: 'word', lessonId: 'demonstratives' },
+  { id: 'card-word-that', front: 'それ', back: 'То', reading: 'sore', kind: 'word', lessonId: 'demonstratives' },
+];
+
+export const flashcards: Flashcard[] = [
+  ...legacyFlashcards.map((card) => ({ ...card, lessonId: legacyFlashcardLessonIds[card.id] })),
+  ...kanaFlashcards,
+  ...expandedWordFlashcards,
 ];
 
 export const diagnosticQuestions: Exercise[] = [

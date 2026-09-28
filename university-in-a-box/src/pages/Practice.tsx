@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowRight, Bookmark, Check, Eye, Layers, RotateCcw, Sparkles } from 'lucide-react';
 import { Link } from 'react-router';
-import { flashcards } from '../domain/curriculum';
+import { flashcards, lessons } from '../domain/curriculum';
 import { scheduleReview } from '../domain/progress';
 import type { Flashcard } from '../domain/types';
 import { useLearning } from '../learning-context';
@@ -21,11 +21,18 @@ export function Practice() {
   const [filter, setFilter] = useState<Filter>('all');
   const [revealed, setRevealed] = useState(false);
   const [seen, setSeen] = useState<string[]>([]);
+  const [includeFuture, setIncludeFuture] = useState(false);
   const matching = flashcards.filter(
     (card) =>
-      filter === 'all' ||
-      (filter === 'saved' && state.savedCardIds.includes(card.id)) ||
-      card.kind === filter,
+      (includeFuture ||
+        !card.lessonId ||
+        card.lessonId === lessons[0].id ||
+        state.attempts.some((attempt) => attempt.lessonId === card.lessonId) ||
+        state.cardReviews[card.id] ||
+        state.savedCardIds.includes(card.id)) &&
+      (filter === 'all' ||
+        (filter === 'saved' && state.savedCardIds.includes(card.id)) ||
+        card.kind === filter),
   );
   const queue = matching.filter(
     (card) =>
@@ -78,6 +85,18 @@ export function Practice() {
           {plural(matching.length, ['карточка', 'карточки', 'карточек'])}
         </span>
       </div>
+      <label className="practice-future">
+        <input
+          type="checkbox"
+          checked={includeFuture}
+          onChange={(event) => {
+            setIncludeFuture(event.target.checked);
+            setSeen([]);
+            setRevealed(false);
+          }}
+        />
+        Весь набор, включая будущие уроки. По умолчанию — знаки из начатых занятий.
+      </label>
       <div className="practice-workspace">
         <section className="flashcard-area">
           <div className="line-between small muted">

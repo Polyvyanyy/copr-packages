@@ -1,6 +1,15 @@
 import { connections } from './connections';
 import { diagnosticQuestions, flashcards, lessons, sources } from './curriculum';
-import type { Answer, Attempt, CardReview, Exercise, LearningState, Lesson } from './types';
+import { getWritingAssignment, writingAssignments } from './writing-assignments';
+import type {
+  Answer,
+  Attempt,
+  CardReview,
+  Exercise,
+  LearningState,
+  Lesson,
+  WritingAssignmentId,
+} from './types';
 
 export const STORAGE_KEY = 'university-in-a-box:japanese:learning:v1';
 export const DIAGNOSTIC_SKIP_ANSWER_ID = 'skipped';
@@ -271,6 +280,16 @@ function parseKnownIds(value: unknown, knownIds: Set<string>): string[] {
   return result;
 }
 
+function parseWritingDrafts(value: unknown): LearningState['writingDrafts'] {
+  if (!isRecord(value)) return undefined;
+  const drafts: Record<string, string> = {};
+  for (const { id } of writingAssignments) {
+    if (id === 'introduction' || !Object.hasOwn(value, id)) continue;
+    if (isText(value[id]) && value[id].length > 0) drafts[id] = value[id];
+  }
+  return Object.keys(drafts).length > 0 ? drafts : undefined;
+}
+
 function parseWritingHistory(value: unknown, now: number): LearningState['writingHistory'] {
   if (!Array.isArray(value) || value.length > MAX_WRITING_HISTORY) return [];
   const history: LearningState['writingHistory'] = [];
@@ -279,12 +298,55 @@ function parseWritingHistory(value: unknown, now: number): LearningState['writin
   for (const version of value) {
     if (!isRecord(version) || !isSafeId(version.id) || ids.has(version.id) || !isText(version.text))
       continue;
+    const assignment = getWritingAssignment(version.assignmentId);
+    if (Object.hasOwn(version, 'assignmentId') && !assignment) continue;
     const createdAt = parseIsoInstant(version.createdAt, now);
     if (!createdAt) continue;
     ids.add(version.id);
-    history.push({ id: version.id, text: version.text, createdAt: createdAt.toISOString() });
+    history.push({
+      id: version.id,
+      text: version.text,
+      createdAt: createdAt.toISOString(),
+      ...(assignment ? { assignmentId: assignment.id } : {}),
+    });
   }
   return history;
+}
+
+export function getWritingDraft(state: LearningState, assignmentId: WritingAssignmentId): string {
+  if (!getWritingAssignment(assignmentId)) return '';
+  return assignmentId === 'introduction'
+    ? state.writingDraft
+    : (parseWritingDrafts(state.writingDrafts)?.[assignmentId] ?? '');
+}
+
+export function updateWritingDraft(
+  state: LearningState,
+  assignmentId: WritingAssignmentId,
+  text: string,
+): LearningState {
+  if (!getWritingAssignment(assignmentId) || !isText(text)) return state;
+  if (assignmentId === 'introduction') return { ...state, writingDraft: text };
+  const next = { ...state };
+  const writingDrafts = parseWritingDrafts({
+    ...parseWritingDrafts(state.writingDrafts),
+    [assignmentId]: text,
+  });
+  if (writingDrafts) next.writingDrafts = writingDrafts;
+  else delete next.writingDrafts;
+  return next;
+}
+
+export function getWritingHistory(
+  state: LearningState,
+  assignmentId: WritingAssignmentId,
+): LearningState['writingHistory'] {
+  if (!getWritingAssignment(assignmentId)) return [];
+  return state.writingHistory.filter(
+    (version) =>
+      version.assignmentId === assignmentId ||
+      (assignmentId === 'introduction' && !Object.hasOwn(version, 'assignmentId')),
+  );
 }
 
 function parseReflections(value: unknown): Record<string, string> {
@@ -440,6 +502,7 @@ export function parseLearningState(value: unknown): LearningState {
     if (!isRecord(parsed) || parsed.version !== 1) return createInitialState();
 
     const now = Date.now();
+    const writingDrafts = parseWritingDrafts(parsed.writingDrafts);
     const state: LearningState = {
       ...createInitialState(),
       goal: parseGoal(parsed.goal),
@@ -450,6 +513,7 @@ export function parseLearningState(value: unknown): LearningState {
       savedCardIds: parseKnownIds(parsed.savedCardIds, flashcardIds),
       savedSourceIds: parseKnownIds(parsed.savedSourceIds, sourceIds),
       writingDraft: isText(parsed.writingDraft) ? parsed.writingDraft : '',
+      ...(writingDrafts ? { writingDrafts } : {}),
       writingHistory: parseWritingHistory(parsed.writingHistory, now),
       reflections: parseReflections(parsed.reflections),
     };
@@ -781,6 +845,26 @@ export function reviewWriting(text: string): {
     .filter((check) => !check.passed)
     .map((check) => `Условие задания не найдено: ${check.label}.`);
   if (/私\s*わ/u.test(text)) notes.unshift('Исправьте «私わ» на «私は».');
+  notes.push('Проверяются только явные условия задания, а не вся грамматика текста.');
+  return { checks, notes };
+}
+
+export function reviewWritingAssignment(
+  text: string,
+  assignmentId: WritingAssignmentId,
+): ReturnType<typeof reviewWriting> {
+  if (assignmentId === 'introduction') return reviewWriting(text);
+  const assignment = getWritingAssignment(assignmentId);
+  if (!assignment)
+    return { checks: [], notes: ['Это письменное задание недоступно. Выберите одно из списка.'] };
+  const checks = assignment.checks.map(({ id, label, pattern }) => ({
+    id,
+    label,
+    passed: pattern.test(typeof text === 'string' ? text : ''),
+  }));
+  const notes = checks
+    .filter((check) => !check.passed)
+    .map((check) => `Условие задания не найдено: ${check.label}.`);
   notes.push('Проверяются только явные условия задания, а не вся грамматика текста.');
   return { checks, notes };
 }

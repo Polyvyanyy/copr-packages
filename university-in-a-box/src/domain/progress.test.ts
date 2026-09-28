@@ -513,8 +513,21 @@ describe('diagnostic recommendation', () => {
       recommendedLessonId: 'hiragana-vowels',
     });
     expect(getDiagnosticResult(throughVowels).recommendedLessonId).toBe('hiragana-k');
-    expect(getDiagnosticResult(throughKRow).recommendedLessonId).toBe('first-words');
-    expect(getDiagnosticResult(correctAnswers).recommendedLessonId).toBe('katakana-vowels');
+    expect(getDiagnosticResult(throughKRow).recommendedLessonId).toBe('hiragana-s');
+    expect(getDiagnosticResult(correctAnswers).recommendedLessonId).toBe('hiragana-s');
+  });
+
+  it('does not treat the legacy five-question diagnostic as evidence for new kana rows', () => {
+    expect(lessons.slice(0, 3).map((lesson) => lesson.id)).toEqual([
+      'hiragana-vowels',
+      'hiragana-k',
+      'hiragana-s',
+    ]);
+    expect(getDiagnosticResult(correctAnswers)).toEqual({
+      correct: 5,
+      total: 5,
+      recommendedLessonId: 'hiragana-s',
+    });
   });
 
   it('rederives diagnostic score and recommendation from all five stored answers', () => {

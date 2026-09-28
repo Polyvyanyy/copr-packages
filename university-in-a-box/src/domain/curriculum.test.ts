@@ -27,10 +27,9 @@ describe('Japanese curriculum', () => {
 
   it('has the planned module, lesson, diagnostic, and flashcard counts', () => {
     expect(modules).toHaveLength(3);
-    expect(lessons).toHaveLength(7);
+    expect(lessons).toHaveLength(40);
     expect(diagnosticQuestions).toHaveLength(5);
-    expect(flashcards.length).toBeGreaterThanOrEqual(20);
-    expect(flashcards.length).toBeLessThanOrEqual(25);
+    expect(flashcards.length).toBeGreaterThan(200);
   });
 
   it('uses globally unique content and choice identifiers', () => {
